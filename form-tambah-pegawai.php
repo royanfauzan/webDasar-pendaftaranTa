@@ -23,7 +23,7 @@
 <body>
     <!-- page info -->
     <?php
-    $namaHalaman = "Halaman Dosen";
+    $namaHalaman = "Halaman Pegawai";
     ?>
 
     <!-- Side Bar -->
@@ -42,7 +42,7 @@
                 <div class="col-6">
                     <div class="card-body px-lg-5 py-lg-5 ">
                         <div class="text-center mb-4">
-                            <h1 class="text-primary font-weight-bold">Manajemen Data Dosen</h1>
+                            <h1 class="text-primary font-weight-bold">Manajemen Data Pegawai</h1>
                         </div>
                         <div class="text-center text-muted font-italic">
                             <small>
@@ -51,6 +51,10 @@
                                 if (isset($_COOKIE['status'])) {
                                     if ($_COOKIE['status'] == 1) {
                                         echo "<span class='text-success font-weight-700'>Data " . $_COOKIE['nip'] . " Berhasil Disimpan </span>";
+                                    } else if ($_COOKIE['status'] == 2) {
+                                        echo "<span class='text-success font-weight-700'>Data " . $_COOKIE['nip'] . " telah di Perbarui </span>";
+                                    }else if ($_COOKIE['status'] == 3) {
+                                        echo "<span class='text-success font-weight-700'>Data " . $_COOKIE['nip'] . " telah di Hapus </span>";
                                     } else {
                                         echo "<span class='text-danger font-weight-700'>Data " . $_COOKIE['nip'] . " Sudah ada! </span>";
                                     }
@@ -72,12 +76,12 @@
                     <div class="card-header border-0">
                         <div class="row justify-content-between">
                             <div class="col-4">
-                                <h3 class="mb-0">Data Dosen</h3>
+                                <h3 class="mb-0">Data Pegawai</h3>
                             </div>
                             <div class="col-3">
                                 <!-- Button trigger modal -->
-                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#menambahDataDosen">
-                                    Tambah Data Dosen
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#menambahDataPegawai">
+                                    Tambah Data Pegawai
                                 </button>
                             </div>
                         </div>
@@ -87,7 +91,7 @@
                         <table class="table align-items-center table-flush">
                             <thead class="thead-light">
                                 <tr>
-                                    <th scope="col">Nama Dosen</th>
+                                    <th scope="col">Nama Pegawai</th>
                                     <th scope="col">NIP</th>
                                     <th scope="col">Email</th>
                                     <th scope="col">No HP</th>
@@ -111,31 +115,31 @@
                                 }
 
                                 // HItung jumlah data dan pembuatan halaman (link)
-                                $query2 = mysqli_query($koneksi, "select * from dosen");
+                                $query2 = mysqli_query($koneksi, "select * from Pegawai");
                                 $jumlahData = mysqli_num_rows($query2);
                                 $jumlahHalaman = ceil($jumlahData / $batas);
 
 
 
-                                $data = mysqli_query($koneksi, "select * from dosen LIMIT $posisi,$batas");
+                                $data = mysqli_query($koneksi, "select * from Pegawai LIMIT $posisi,$batas");
                                 while ($d = mysqli_fetch_array($data)) {
                                 ?>
                                     <tr>
                                         <th scope="row">
-                                            <?php echo $d['namaDosen']; ?>
+                                            <?php echo $d['namaPegawai']; ?>
                                         </th>
                                         <td>
                                             <?php echo $d['nip']; ?>
                                         </td>
                                         <td>
-                                            <?php echo $d['emailDosen']; ?>
+                                            <?php echo $d['emailPegawai']; ?>
                                         </td>
                                         <td>
-                                            <?php echo $d['noHpDosen']; ?>
+                                            <?php echo $d['noHpPegawai']; ?>
                                         </td>
                                         <td>
-                                            <a href="#editDataDosen<?php echo $no; ?>" data-toggle="modal" class="btn btn-sm btn-warning">Edit</a>
-                                            <a href="#" class="btn btn-sm btn-outline-danger">Hapus</a>
+                                            <a href="#editDataPegawai<?php echo $no; ?>" data-toggle="modal" class="btn btn-sm btn-warning">Edit</a>
+                                            <a href="#hapusDataPegawai<?php echo $no; ?>" data-toggle="modal" class="btn btn-sm btn-outline-danger">Hapus</a>
                                         </td>
 
                                     </tr>
@@ -158,7 +162,7 @@
 
                             for ($i = 1; $i <= $jumlahHalaman; $i++) {
                                 if ($i != $halaman) {
-                                    echo "<li class='page-item'><a class='page-link' href='form-tambah-dosen.php?halaman=$i'>$i</a></li>";
+                                    echo "<li class='page-item'><a class='page-link' href='form-tambah-Pegawai.php?halaman=$i'>$i</a></li>";
                                 } else {
                                     echo "<li class='page-item active'>
                                         <a class='page-link' href='#'>$i <span class='sr-only'>(current)</span></a>
@@ -178,17 +182,17 @@
         </div>
 
         <!-- Modal -->
-        <div class="modal fade" id="menambahDataDosen" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+        <div class="modal fade" id="menambahDataPegawai" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h2 class="text-primary font-weight-bold">Menambah Data Dosen</h2>
+                        <h2 class="text-primary font-weight-bold">Menambah Data Pegawai</h2>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form method="post" role="form" action="tambahDosen.php">
+                        <form method="post" role="form" action="tambahPegawai.php">
                             <div class="form-group">
                                 <div class="input-group input-group-merge input-group-alternative mb-3">
                                     <div class="input-group-prepend">
@@ -222,9 +226,9 @@
                                 </div>
                             </div>
                             <div class="row justify-content-end">
-                                <div class="col-7">
+                                <div class="col-8">
                                     <button type="button" class="btn btn-secondary mt-4" data-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn btn-primary mt-4">Tambah Dosen</button>
+                                    <button type="submit" class="btn btn-primary mt-4">Tambah Pegawai</button>
 
                                 </div>
                             </div>
@@ -237,26 +241,34 @@
         <!-- Modal Edit Generator -->
         <?php
         $no = 1;
-        $data = mysqli_query($koneksi, "select * from dosen LIMIT $posisi,$batas");
+        $data = mysqli_query($koneksi, "select * from Pegawai LIMIT $posisi,$batas");
         while ($d = mysqli_fetch_array($data)) {
         ?>
-            <div class="modal fade" id="editDataDosen<?php echo $no;?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+            <div class="modal fade" id="editDataPegawai<?php echo $no;?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h2 class="text-primary font-weight-bold">Edit Data Dosen</h2>
+                            <h2 class="text-primary font-weight-bold">Edit Data Pegawai</h2>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                         <div class="modal-body">
-                            <form method="post" role="form" action="tambahDosen.php">
+                            <form method="post" role="form" action="editPegawai.php">
+                                <div class="form-group">
+                                    <div class="input-group input-group-merge input-group-alternative mb-3 invisible">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="ni ni-badge"></i></span>
+                                        </div>
+                                        <input class="form-control" placeholder="NIP" type="hidden" name="nip" value="<?php echo $d['nip']; ?>" >
+                                    </div>
+                                </div>
                                 <div class="form-group">
                                     <div class="input-group input-group-merge input-group-alternative mb-3">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="ni ni-badge"></i></span>
                                         </div>
-                                        <input class="form-control" placeholder="NIP" type="text" name="nip" value="<?php echo $d['nip']; ?>" disabled>
+                                        <input class="form-control" placeholder="NIP" name="nipTampil" value="<?php echo $d['nip']; ?>" disabled>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -264,7 +276,7 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="ni ni-circle-08"></i></span>
                                         </div>
-                                        <input class="form-control" placeholder="Nama" type="text" name="nama" value="<?php echo $d['namaDosen']; ?>">
+                                        <input class="form-control" placeholder="Nama" type="text" name="nama" value="<?php echo $d['namaPegawai']; ?>">
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -272,7 +284,7 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="ni ni-email-83"></i></span>
                                         </div>
-                                        <input class="form-control" placeholder="Email" type="text" name="email" value="<?php echo $d['emailDosen']; ?>">
+                                        <input class="form-control" placeholder="Email" type="text" name="email" value="<?php echo $d['emailPegawai']; ?>">
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -280,17 +292,52 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="ni ni-mobile-button"></i></span>
                                         </div>
-                                        <input class="form-control" placeholder="No HP" type="text" name="noHp" value="<?php echo $d['noHpDosen']; ?>">
+                                        <input class="form-control" placeholder="No HP" type="text" name="noHp" value="<?php echo $d['noHpPegawai']; ?>">
                                     </div>
                                 </div>
                                 <div class="row justify-content-end">
-                                    <div class="col-7">
+                                    <div class="col-8">
                                         <button type="button" class="btn btn-secondary mt-4" data-dismiss="modal">Close</button>
-                                        <button type="submit" class="btn btn-primary mt-4">Update Dosen</button>
+                                        <button type="submit" class="btn btn-primary mt-4">Update Pegawai</button>
 
                                     </div>
                                 </div>
                             </form>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        <?php
+        $no++;
+        }
+        ?>
+
+        <!-- Modal Hapus Generator -->
+        <?php
+        $no = 1;
+        $data = mysqli_query($koneksi, "select * from Pegawai LIMIT $posisi,$batas");
+        while ($d = mysqli_fetch_array($data)) {
+        ?>
+            <div class="modal fade" id="hapusDataPegawai<?php echo $no;?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2 class="text-primary font-weight-bold">Edit Data Pegawai</h2>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Apakah anda yakin akan menghapus data Pegawai " <span class="text-danger"><?php echo $d['namaPegawai']; ?></span> " ?</p>
+                                <div class="row justify-content-end">
+                                    <div class="col-8">
+                                        <button type="button" class="btn btn-secondary mt-4" data-dismiss="modal">Close</button>
+                                        <a href="hapusPegawai.php?nip=<?php echo $d['nip']; ?>" class="btn btn-danger mt-4">Hapus</a>
+
+                                    </div>
+                                </div>
+                            
                         </div>
 
                     </div>
