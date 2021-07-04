@@ -23,7 +23,7 @@
 <body>
     <!-- page info -->
     <?php
-    $namaHalaman = "Halaman Pegawai";
+    $namaHalaman = "Halaman Mahasiswa";
     ?>
 
     <!-- Side Bar -->
@@ -42,7 +42,7 @@
                 <div class="col-6">
                     <div class="card-body px-lg-5 py-lg-5 ">
                         <div class="text-center mb-4">
-                            <h1 class="text-primary font-weight-bold">Manajemen Data Pegawai</h1>
+                            <h1 class="text-primary font-weight-bold">Manajemen Data Mahasiswa</h1>
                         </div>
                         <div class="text-center text-muted font-italic">
                             <small>
@@ -50,13 +50,13 @@
                                 <?php
                                 if (isset($_COOKIE['status'])) {
                                     if ($_COOKIE['status'] == 1) {
-                                        echo "<span class='text-success font-weight-700'>Data " . $_COOKIE['nip'] . " Berhasil Disimpan </span>";
+                                        echo "<span class='text-success font-weight-700'>Data " . $_COOKIE['nim'] . " Berhasil Disimpan </span>";
                                     } else if ($_COOKIE['status'] == 2) {
-                                        echo "<span class='text-success font-weight-700'>Data " . $_COOKIE['nip'] . " telah di Perbarui </span>";
+                                        echo "<span class='text-success font-weight-700'>Data " . $_COOKIE['nim'] . " telah di Perbarui </span>";
                                     }else if ($_COOKIE['status'] == 3) {
-                                        echo "<span class='text-success font-weight-700'>Data " . $_COOKIE['nip'] . " telah di Hapus </span>";
+                                        echo "<span class='text-success font-weight-700'>Data " . $_COOKIE['nim'] . " telah di Hapus </span>";
                                     } else {
-                                        echo "<span class='text-danger font-weight-700'>Data " . $_COOKIE['nip'] . " Sudah ada! </span>";
+                                        echo "<span class='text-danger font-weight-700'>Data " . $_COOKIE['nim'] . " Sudah ada! </span>";
                                     }
                                 } else {
                                     echo " ";
@@ -76,12 +76,12 @@
                     <div class="card-header border-0">
                         <div class="row justify-content-between">
                             <div class="col-4">
-                                <h3 class="mb-0">Data Pegawai</h3>
+                                <h3 class="mb-0">Data Mahasiswa</h3>
                             </div>
                             <div class="col-3">
                                 <!-- Button trigger modal -->
-                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#menambahDataPegawai">
-                                    Tambah Data Pegawai
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#menambahDataMahasiswa">
+                                    Tambah Data Mahasiswa
                                 </button>
                             </div>
                         </div>
@@ -91,10 +91,11 @@
                         <table class="table align-items-center table-flush">
                             <thead class="thead-light">
                                 <tr>
-                                    <th scope="col">Nama Pegawai</th>
-                                    <th scope="col">NIP</th>
+                                    <th scope="col">Nama Mahasiswa</th>
+                                    <th scope="col">nim</th>
                                     <th scope="col">Email</th>
                                     <th scope="col">No HP</th>
+                                    <th scope="col">Status</th>
                                     <th scope="col">Manajemen</th>
                                 </tr>
                             </thead>
@@ -115,31 +116,34 @@
                                 }
 
                                 // HItung jumlah data dan pembuatan halaman (link)
-                                $query2 = mysqli_query($koneksi, "select * from Pegawai");
+                                $query2 = mysqli_query($koneksi, "select * from Mahasiswa");
                                 $jumlahData = mysqli_num_rows($query2);
                                 $jumlahHalaman = ceil($jumlahData / $batas);
 
 
 
-                                $data = mysqli_query($koneksi, "select * from Pegawai LIMIT $posisi,$batas");
+                                $data = mysqli_query($koneksi, "select * from (select * from Mahasiswa LEFT JOIN prodi ON mahasiswa.prodiMhs=prodi.kodeProdi LIMIT $posisi,$batas) as tbMhs ORDER BY nim");
                                 while ($d = mysqli_fetch_array($data)) {
                                 ?>
                                     <tr>
                                         <th scope="row">
-                                            <?php echo $d['namaPegawai']; ?>
+                                            <?php echo $d['namaMhs']; ?>
                                         </th>
                                         <td>
-                                            <?php echo $d['nip']; ?>
+                                            <?php echo $d['nim']; ?>
                                         </td>
                                         <td>
-                                            <?php echo $d['emailPegawai']; ?>
+                                            <?php echo $d['emailMhs']; ?>
                                         </td>
                                         <td>
-                                            <?php echo $d['noHpPegawai']; ?>
+                                            <?php echo $d['noHpMhs']; ?>
                                         </td>
                                         <td>
-                                            <a href="#editDataPegawai<?php echo $no; ?>" data-toggle="modal" class="btn btn-sm btn-warning">Edit</a>
-                                            <a href="#hapusDataPegawai<?php echo $no; ?>" data-toggle="modal" class="btn btn-sm btn-outline-danger">Hapus</a>
+                                            <?php echo $d['statusMhs']; ?>
+                                        </td>
+                                        <td>
+                                            <a href="#editDataMahasiswa<?php echo $no; ?>" data-toggle="modal" class="btn btn-sm btn-warning">Edit</a>
+                                            <a href="#hapusDataMahasiswa<?php echo $no; ?>" data-toggle="modal" class="btn btn-sm btn-outline-danger">Hapus</a>
                                         </td>
 
                                     </tr>
@@ -162,7 +166,7 @@
 
                             for ($i = 1; $i <= $jumlahHalaman; $i++) {
                                 if ($i != $halaman) {
-                                    echo "<li class='page-item'><a class='page-link' href='form-tambah-Pegawai.php?halaman=$i'>$i</a></li>";
+                                    echo "<li class='page-item'><a class='page-link' href='form-tambah-Mahasiswa.php?halaman=$i'>$i</a></li>";
                                 } else {
                                     echo "<li class='page-item active'>
                                         <a class='page-link' href='#'>$i <span class='sr-only'>(current)</span></a>
@@ -181,24 +185,24 @@
             </div>
         </div>
 
-        <!-- Modal Menambah data -->
-        <div class="modal fade" id="menambahDataPegawai" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+        <!-- Modal -->
+        <div class="modal fade" id="menambahDataMahasiswa" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h2 class="text-primary font-weight-bold">Menambah Data Pegawai</h2>
+                        <h2 class="text-primary font-weight-bold">Menambah Data Mahasiswa</h2>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form method="post" role="form" action="tambahPegawai.php">
+                        <form method="post" role="form" action="tambahMahasiswa.php">
                             <div class="form-group">
                                 <div class="input-group input-group-merge input-group-alternative mb-3">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="ni ni-badge"></i></span>
                                     </div>
-                                    <input class="form-control" placeholder="NIP" type="text" name="nip">
+                                    <input class="form-control" placeholder="NIM" type="text" name="nim">
                                 </div>
                             </div>
                             <div class="form-group">
@@ -225,10 +229,29 @@
                                     <input class="form-control" placeholder="No HP" type="text" name="noHp">
                                 </div>
                             </div>
+                            <div class="form-group">
+                                <div class="input-group input-group-merge input-group-alternative">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="ni ni-hat-3"></i></span>
+                                    </div>
+                                    <select class="custom-select" name="prodiMhs" required>
+                                        <option>Pilih Prodi Mahasiswa</option>
+                                        <?php
+
+                                            $query2 = mysqli_query($koneksi, "select * from prodi");
+                                            while ($d = mysqli_fetch_array($query2)) {
+                                        ?>
+                                                <option value="<?php echo $d['kodeProdi']; ?>"><?php echo $d['namaProdi']; ?></option>
+                                        <?php
+                                            }
+                                        ?>
+                                    </select>
+                                </div>
+                            </div>
                             <div class="row justify-content-end">
-                                <div class="col-8">
+                                <div class="col-7">
                                     <button type="button" class="btn btn-secondary mt-4" data-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn btn-primary mt-4">Tambah Pegawai</button>
+                                    <button type="submit" class="btn btn-primary mt-4">Tambah Mahasiswa</button>
 
                                 </div>
                             </div>
@@ -241,26 +264,26 @@
         <!-- Modal Edit Generator -->
         <?php
         $no = 1;
-        $data = mysqli_query($koneksi, "select * from Pegawai LIMIT $posisi,$batas");
+        $data = mysqli_query($koneksi, "select * from (select * from Mahasiswa LEFT JOIN prodi ON mahasiswa.prodiMhs=prodi.kodeProdi LIMIT $posisi,$batas) as tbMhs ORDER BY nim");
         while ($d = mysqli_fetch_array($data)) {
         ?>
-            <div class="modal fade" id="editDataPegawai<?php echo $no;?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+            <div class="modal fade" id="editDataMahasiswa<?php echo $no;?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h2 class="text-primary font-weight-bold">Edit Data Pegawai</h2>
+                            <h2 class="text-primary font-weight-bold">Edit Data Mahasiswa</h2>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                         <div class="modal-body">
-                            <form method="post" role="form" action="editPegawai.php">
+                            <form method="post" role="form" action="editMahasiswa.php">
                                 <div class="form-group">
                                     <div class="input-group input-group-merge input-group-alternative mb-3 invisible">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="ni ni-badge"></i></span>
                                         </div>
-                                        <input class="form-control" placeholder="NIP" type="hidden" name="nip" value="<?php echo $d['nip']; ?>" >
+                                        <input class="form-control" placeholder="nim" type="hidden" name="nim" value="<?php echo $d['nim']; ?>" >
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -268,7 +291,7 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="ni ni-badge"></i></span>
                                         </div>
-                                        <input class="form-control" placeholder="NIP" name="nipTampil" value="<?php echo $d['nip']; ?>" disabled>
+                                        <input class="form-control" placeholder="nim" name="nimTampil" value="<?php echo $d['nim']; ?>" disabled>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -276,7 +299,7 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="ni ni-circle-08"></i></span>
                                         </div>
-                                        <input class="form-control" placeholder="Nama" type="text" name="nama" value="<?php echo $d['namaPegawai']; ?>">
+                                        <input class="form-control" placeholder="Nama" type="text" name="nama" value="<?php echo $d['namaMhs']; ?>">
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -284,7 +307,7 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="ni ni-email-83"></i></span>
                                         </div>
-                                        <input class="form-control" placeholder="Email" type="text" name="email" value="<?php echo $d['emailPegawai']; ?>">
+                                        <input class="form-control" placeholder="Email" type="text" name="email" value="<?php echo $d['emailMhs']; ?>">
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -292,13 +315,44 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="ni ni-mobile-button"></i></span>
                                         </div>
-                                        <input class="form-control" placeholder="No HP" type="text" name="noHp" value="<?php echo $d['noHpPegawai']; ?>">
+                                        <input class="form-control" placeholder="No HP" type="text" name="noHp" value="<?php echo $d['noHpMhs']; ?>">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group input-group-merge input-group-alternative">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="ni ni-mobile-button"></i></span>
+                                        </div>
+                                        <select class="custom-select" name="statusMhs" required>
+                                            <option value="Aktif">Aktif</option>
+                                            <option value="Cuti">Cuti</option>
+                                            <option value="Lulus">Lulus</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group input-group-merge input-group-alternative">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="ni ni-hat-3"></i></span>
+                                        </div>
+                                        <select class="custom-select" name="prodiMhs" required>
+                                            <option value="<?php echo $d['kodeProdi']; ?>"><?php echo $d['namaProdi']; ?></option>
+                                            <?php
+
+                                                $query2 = mysqli_query($koneksi, "select * from prodi");
+                                                while ($d2 = mysqli_fetch_array($query2)) {
+                                            ?>
+                                                    <option value="<?php echo $d2['kodeProdi']; ?>"><?php echo $d2['namaProdi']; ?></option>
+                                            <?php
+                                                }
+                                            ?>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="row justify-content-end">
-                                    <div class="col-8">
+                                    <div class="col-7">
                                         <button type="button" class="btn btn-secondary mt-4" data-dismiss="modal">Close</button>
-                                        <button type="submit" class="btn btn-primary mt-4">Update Pegawai</button>
+                                        <button type="submit" class="btn btn-primary mt-4">Update Mahasiswa</button>
 
                                     </div>
                                 </div>
@@ -316,24 +370,24 @@
         <!-- Modal Hapus Generator -->
         <?php
         $no = 1;
-        $data = mysqli_query($koneksi, "select * from Pegawai LIMIT $posisi,$batas");
+        $data = mysqli_query($koneksi, "select * from (select * from Mahasiswa LEFT JOIN prodi ON mahasiswa.prodiMhs=prodi.kodeProdi LIMIT $posisi,$batas) as tbMhs ORDER BY nim");
         while ($d = mysqli_fetch_array($data)) {
         ?>
-            <div class="modal fade" id="hapusDataPegawai<?php echo $no;?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+            <div class="modal fade" id="hapusDataMahasiswa<?php echo $no;?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h2 class="text-primary font-weight-bold">Edit Data Pegawai</h2>
+                            <h2 class="text-primary font-weight-bold">Edit Data Mahasiswa</h2>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                         <div class="modal-body">
-                            <p>Apakah anda yakin akan menghapus data Pegawai " <span class="text-danger"><?php echo $d['namaPegawai']; ?></span> " ?</p>
+                            <p>Apakah anda yakin akan menghapus data Mahasiswa " <span class="text-danger"><?php echo $d['namaMhs']; ?></span> " ?</p>
                                 <div class="row justify-content-end">
-                                    <div class="col-8">
+                                    <div class="col-7">
                                         <button type="button" class="btn btn-secondary mt-4" data-dismiss="modal">Close</button>
-                                        <a href="hapusPegawai.php?nip=<?php echo $d['nip']; ?>" class="btn btn-danger mt-4">Hapus</a>
+                                        <a href="hapusMahasiswa.php?nim=<?php echo $d['nim']; ?>" class="btn btn-danger mt-4">Hapus</a>
 
                                     </div>
                                 </div>
@@ -349,6 +403,10 @@
         ?>
 
     </div>
+
+
+
+
 
     <!-- Core -->
     <script src="assets/vendor/jquery/dist/jquery.min.js"></script>

@@ -5,7 +5,7 @@ $nip = $_POST['nip'];
 $email = $_POST['email'];
 $noHp = $_POST['noHp'];
 $pass = $nip."!pgw";
-$lvl = 3;
+$lvl = 4;
 
 $data = mysqli_query($koneksi,"select * from pegawai where nip = '$nip'");
 
