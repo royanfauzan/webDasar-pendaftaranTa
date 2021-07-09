@@ -23,6 +23,20 @@
 <body>
     <!-- page info -->
     <?php
+    session_start();
+    if ($_SESSION['lvAkses']==4) {
+    include 'koneksi.php';
+    $namaHalaman = "Dashboard";
+
+    $lvlAkses = $_SESSION['lvAkses'];
+    
+    $kolom_id_Arr = array(" ", "Mhs","Mhs","Dosen","Pegawai","Dosen");
+    $kolom_id = $kolom_id_Arr[$lvlAkses];
+    $tabel = $_SESSION['tabel'];
+    $fk = $_SESSION['fk_user'];
+    $id_user = $_SESSION['id_user'];
+    $data3 = mysqli_query($koneksi, "select * from $tabel where $fk='$id_user'");
+    $d4 = mysqli_fetch_array($data3);
     $namaHalaman = "Halaman Prodi";
     ?>
 
@@ -120,7 +134,7 @@
 
 
 
-                                $data = mysqli_query($koneksi, "select * from (select * from Prodi inner join dosen on prodi.nipKaprodi=dosen.nip LIMIT $posisi,$batas) as t ORDER BY kodeProdi asc");
+                                $data = mysqli_query($koneksi, "select * from Prodi inner join dosen on prodi.nipKaprodi=dosen.nip ORDER BY kodeProdi desc LIMIT $posisi,$batas");
                                 while ($d = mysqli_fetch_array($data)) {
                                 ?>
                                     <tr>
@@ -242,7 +256,7 @@
         <!-- Modal Edit Generator -->
         <?php
         $no = 1;
-        $data = mysqli_query($koneksi, "select * from (select * from Prodi inner join dosen on prodi.nipKaprodi=dosen.nip LIMIT $posisi,$batas) as t ORDER BY kodeProdi asc");
+        $data = mysqli_query($koneksi, "select * from Prodi inner join dosen on prodi.nipKaprodi=dosen.nip ORDER BY kodeProdi desc LIMIT $posisi,$batas");
         while ($d = mysqli_fetch_array($data)) {
         ?>
             <div class="modal fade" id="editDataProdi<?php echo $no;?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
@@ -319,7 +333,7 @@
         <!-- Modal Hapus Generator -->
         <?php
         $no = 1;
-        $data = mysqli_query($koneksi, "select * from (select * from Prodi inner join dosen on prodi.nipKaprodi=dosen.nip LIMIT $posisi,$batas) as t ORDER BY kodeProdi asc");
+        $data = mysqli_query($koneksi, "select * from Prodi inner join dosen on prodi.nipKaprodi=dosen.nip ORDER BY kodeProdi desc LIMIT $posisi,$batas");
         while ($d = mysqli_fetch_array($data)) {
         ?>
             <div class="modal fade" id="hapusDataProdi<?php echo $no;?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
@@ -349,6 +363,7 @@
         <?php
         $no++;
         }
+    }
         ?>
 
     </div>

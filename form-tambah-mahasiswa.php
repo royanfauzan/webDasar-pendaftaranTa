@@ -23,7 +23,23 @@
 <body>
     <!-- page info -->
     <?php
+    session_start();
+    if ($_SESSION['lvAkses']==4) {
+
+    include 'koneksi.php';
+    $namaHalaman = "Dashboard";
+
+    $lvlAkses = $_SESSION['lvAkses'];
+    
+    $kolom_id_Arr = array(" ", "Mhs","Mhs","Dosen","Pegawai","Dosen");
+    $kolom_id = $kolom_id_Arr[$lvlAkses];
+    $tabel = $_SESSION['tabel'];
+    $fk = $_SESSION['fk_user'];
+    $id_user = $_SESSION['id_user'];
+    $data3 = mysqli_query($koneksi, "select * from $tabel where $fk='$id_user'");
+    $d4 = mysqli_fetch_array($data3);
     $namaHalaman = "Halaman Mahasiswa";
+
     ?>
 
     <!-- Side Bar -->
@@ -122,7 +138,7 @@
 
 
 
-                                $data = mysqli_query($koneksi, "select * from (select * from Mahasiswa LEFT JOIN prodi ON mahasiswa.prodiMhs=prodi.kodeProdi LIMIT $posisi,$batas) as tbMhs ORDER BY nim");
+                                $data = mysqli_query($koneksi, "select * from Mahasiswa LEFT JOIN prodi ON mahasiswa.prodiMhs=prodi.kodeProdi ORDER BY nim desc LIMIT $posisi,$batas");
                                 while ($d = mysqli_fetch_array($data)) {
                                 ?>
                                     <tr>
@@ -264,7 +280,7 @@
         <!-- Modal Edit Generator -->
         <?php
         $no = 1;
-        $data = mysqli_query($koneksi, "select * from (select * from Mahasiswa LEFT JOIN prodi ON mahasiswa.prodiMhs=prodi.kodeProdi LIMIT $posisi,$batas) as tbMhs ORDER BY nim");
+        $data = mysqli_query($koneksi, "select * from Mahasiswa LEFT JOIN prodi ON mahasiswa.prodiMhs=prodi.kodeProdi ORDER BY nim desc LIMIT $posisi,$batas");
         while ($d = mysqli_fetch_array($data)) {
         ?>
             <div class="modal fade" id="editDataMahasiswa<?php echo $no;?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
@@ -370,7 +386,7 @@
         <!-- Modal Hapus Generator -->
         <?php
         $no = 1;
-        $data = mysqli_query($koneksi, "select * from (select * from Mahasiswa LEFT JOIN prodi ON mahasiswa.prodiMhs=prodi.kodeProdi LIMIT $posisi,$batas) as tbMhs ORDER BY nim");
+        $data = mysqli_query($koneksi, "select * from Mahasiswa LEFT JOIN prodi ON mahasiswa.prodiMhs=prodi.kodeProdi ORDER BY nim desc LIMIT $posisi,$batas");
         while ($d = mysqli_fetch_array($data)) {
         ?>
             <div class="modal fade" id="hapusDataMahasiswa<?php echo $no;?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
@@ -400,9 +416,11 @@
         <?php
         $no++;
         }
+
+    }
         ?>
 
-    </div>
+</div>
 
 
 

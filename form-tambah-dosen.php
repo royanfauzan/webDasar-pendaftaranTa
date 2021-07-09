@@ -23,6 +23,20 @@
 <body>
     <!-- page info -->
     <?php
+    session_start();
+    if ($_SESSION['lvAkses']==4) {
+    include 'koneksi.php';
+    $namaHalaman = "Halaman Dosen";
+
+    $lvlAkses = $_SESSION['lvAkses'];
+    
+    $kolom_id_Arr = array(" ", "Mhs","Mhs","Dosen","Pegawai","Dosen");
+    $kolom_id = $kolom_id_Arr[$lvlAkses];
+    $tabel = $_SESSION['tabel'];
+    $fk = $_SESSION['fk_user'];
+    $id_user = $_SESSION['id_user'];
+    $data3 = mysqli_query($koneksi, "select * from $tabel where $fk='$id_user'");
+    $d4 = mysqli_fetch_array($data3);
     $namaHalaman = "Halaman Dosen";
     ?>
 
@@ -346,6 +360,7 @@
         <?php
         $no++;
         }
+    }
         ?>
 
     </div>
