@@ -150,19 +150,19 @@
                                                     <?php
                                                     if ($status == 2) {
                                                     ?>
-                                                        <a href="#editDataTa<?php echo $no; ?>" data-toggle="modal" class="btn btn-sm btn-success">Upload File</a>
+                                                        <a href="#editFileTa<?php echo $no; ?>" data-toggle="modal" class="btn btn-sm btn-success">Upload File</a>
                                                     <?php
                                                     } elseif ($status == 0) {
                                                     ?>
                                                         <a href="#editJudulTa<?php echo $no; ?>" data-toggle="modal" class="btn btn-sm btn-warning">Perbaikan</a>
                                                     <?php
-                                                    }else {
-                                                        ?>
+                                                    } else {
+                                                    ?>
                                                         <h5 class="<?php echo $warnaKolom; ?>">No Action</h5>
                                                     <?php
                                                     }
                                                     ?>
-                                                    
+
                                                 </td>
 
                                             </tr>
@@ -324,6 +324,80 @@
                                             <button type="button" class="btn btn-secondary mt-4" data-dismiss="modal">Close</button>
                                             <button type="submit" class="btn btn-primary mt-4">Perbaiki Ta</button>
 
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            <?php
+                $no++;
+            }
+            ?>
+
+            <!-- Modal Upload Generator -->
+            <?php
+            $no = 1;
+            $data = mysqli_query($koneksi, "select tugasAkhir.*, dospem1.namaDosen AS 'bimbing1', dospem2.namaDosen AS 'bimbing2', abstrak, fullpaper from tugasAkhir Left join dosen dospem1 on tugasAkhir.pembimbing1 = dospem1.nip Left join dosen dospem2 on tugasAkhir.pembimbing2 = dospem2.nip where nimMhs='$id_user'");
+            while ($d = mysqli_fetch_array($data)) {
+            ?>
+                <div class="modal fade" id="editFileTa<?php echo $no; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h2 class="text-primary font-weight-bold">Upload File TA</h2>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form method="post" role="form" action="editFileTa.php" enctype="multipart/form-data">
+                                    <div class="form-group">
+                                        <h3 class="text-dark font-weight-bold"><?php echo $d['judulTa']; ?></h3>
+                                        <hr class="my-4" />
+                                    </div>
+                                    <div class="form-group">
+                                        <h5 class="text-muted font-weight-bold"> File Abstrak :
+                                            <?php
+                                            if (!empty($d['abstrak'])) {
+                                            ?>
+                                                <a href="<?php echo $d['abstrak']; ?>" class="btn btn-sm btn-success"><?php echo pathinfo($d['abstrak'],PATHINFO_BASENAME); ?></a>
+                                            <?php
+                                            } else {
+                                                echo "Pilih File Abstrak..";
+                                            }
+                                            ?>
+                                        </h5>
+                                        <div class="custom-file">
+                                            <input type="file" class="custom-file-input" name="abstrak" id="customFileAbstrak">
+                                            <label class="custom-file-label" for="customFileAbstrak">
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <h5 class="text-muted font-weight-bold"> File FullPaper :
+                                            <?php
+                                            if (!empty($d['fullpaper'])) {
+                                                ?>
+                                                <a href="<?php echo $d['fullpaper']; ?>" class="btn btn-sm btn-success"><?php echo pathinfo($d['fullpaper'],PATHINFO_BASENAME); ?></a>
+                                            <?php
+                                            } else {
+                                                echo "Pilih File FullPaper..";
+                                            }
+                                            ?>
+                                        </h5>
+                                        <div class="custom-file">
+                                            <input type="file" class="custom-file-input" name="fullpaper" id="customFileFullpaper">
+                                            <label class="custom-file-label" for="customFileFullpaper">
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="row justify-content-end">
+                                        <div class="col-7">
+                                            <button type="button" class="btn btn-secondary mt-4" data-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-primary mt-4">Upload File</button>
                                         </div>
                                     </div>
                                 </form>
