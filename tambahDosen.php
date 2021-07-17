@@ -5,7 +5,7 @@ $nip = $_POST['nip'];
 $email = $_POST['email'];
 $noHp = $_POST['noHp'];
 $pass = $nip."!dsn";
-$lvl = 2;
+$lvl = 3;
 
 $data = mysqli_query($koneksi,"select * from dosen where nip = '$nip'");
 

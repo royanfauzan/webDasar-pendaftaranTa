@@ -31,13 +31,30 @@
     $lvlAkses = $_SESSION['lvAkses'];
     
     $kolom_id_Arr = array(" ", "Mhs","Mhs","Dosen","Pegawai","Dosen");
+    $kolom_status_Arr = array("Ditolak", "Menunggu Disetujui", "Disetujui", "Selesai");
     $kolom_id = $kolom_id_Arr[$lvlAkses];
     $tabel = $_SESSION['tabel'];
     $fk = $_SESSION['fk_user'];
     $id_user = $_SESSION['id_user'];
     $data3 = mysqli_query($koneksi, "select * from $tabel where $fk='$id_user'");
     $d4 = mysqli_fetch_array($data3);
-
+    
+    #data Ringkasan
+    if ($lvlAkses==1 || $lvlAkses==2) {
+        $queryInfo = "SELECT nimMhs AS info1,namaProdi AS info2,judulTa AS info3,statusta AS info4 FROM tugasakhir JOIN prodi ON tugasakhir.`kodeProdiTa` = prodi.`kodeProdi` WHERE nimMhs ='$id_user'";
+        $infoArr = array("NIM","Program Studi","Judul Tugas Akhir","Status TA");
+    }elseif($lvlAkses==3){
+        $queryInfo = "SELECT namaDosen AS info1,(SELECT COUNT(filter.nimMhs) FROM (SELECT * FROM tugasakhir WHERE pembimbing1='$id_user' OR pembimbing2='$id_user') AS filter WHERE filter.statusTa=1 OR filter.statusTa=2) AS info2,(SELECT COUNT(filter.nimMhs) FROM (SELECT * FROM tugasakhir WHERE pembimbing1='$id_user' OR pembimbing2='$id_user') AS filter) AS info3,(SELECT COUNT(filter.nimMhs) FROM (SELECT * FROM tugasakhir WHERE pembimbing1='$id_user' OR pembimbing2='$id_user') AS filter WHERE filter.statusTa=3) AS info4 FROM dosen WHERE nip='$id_user'";
+        $infoArr = array("NIP","Mahasiswa Bimbingan","Jumlah Dibimbing","Jumlah Lulus");
+    }elseif($lvlAkses==4){
+        $queryInfo = "SELECT nip AS info1,(SELECT COUNT(nimMhs) FROM tugasakhir) AS info2,(SELECT COUNT(nimMhs) FROM tugasakhir WHERE statusTa = 2) AS info3 , (SELECT COUNT(nimMhs) FROM tugasakhir WHERE statusTa = 3) AS info4 FROM pegawai WHERE nip = '$id_user'";
+        $infoArr = array("NIP","Total TA","Jumlah TA Disetujui","Jumlah TA Selesai");
+    }elseif($lvlAkses==5){
+        $queryInfo = "SELECT nipKaprodi AS info1, namaProdi AS info2, (SELECT COUNT(nimMhs) FROM tugasakhir WHERE statusTa = 1) AS info3 , (SELECT COUNT(nimMhs) FROM tugasakhir WHERE statusTa = 3) AS info4 FROM prodi WHERE nipKaprodi = '$id_user'";
+        $infoArr = array("NIP","Program Studi","TA Menunggu Persetujuan","Jumlah TA Selesai");
+    }
+    $dataInfo = mysqli_query($koneksi,$queryInfo);
+    $ringkasanInfo = mysqli_fetch_assoc($dataInfo);
     ?>
 
     <!-- Side Bar -->
@@ -59,7 +76,7 @@
                     <div class="col-lg-7 col-md-10">
                         <h1 class="display-2 text-white">Hello <?php echo explode(" ",trim($d4['nama'.$kolom_id]))[0]; ?></h1>
                         <p class="text-white mt-0 mb-5">Selamat datang di sistem pendaftaran Tugas Akhir, Sistem ini akan membantu mengelola pendaftaran serta administrasi tugas akhir..</p>
-                        <a href="#!" class="btn btn-neutral">Lihat List TA</a>
+                        <a href="list-Ta.php" class="btn btn-neutral">Lihat List TA</a>
                     </div>
                 </div>
             </div>
@@ -128,74 +145,40 @@
                                     <div class="row">
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label class="form-control-label" for="input-username">Username</label>
-                                                <input type="text" id="input-username" class="form-control" placeholder="Username" value="lucky.jesse">
+                                                <label class="form-control-label" for="input-username"><?php echo $infoArr[0]; ?></label>
+                                                <input type="text" id="input-username" class="form-control" placeholder="Username" value="<?php echo $ringkasanInfo['info1']; ?>">
                                             </div>
                                         </div>
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label class="form-control-label" for="input-email">Email address</label>
-                                                <input type="email" id="input-email" class="form-control" placeholder="jesse@example.com">
+                                                <label class="form-control-label" for="input-email"><?php echo $infoArr[1]; ?></label>
+                                                <input type="email" id="input-email" class="form-control" placeholder="jesse@example.com" value="<?php echo $ringkasanInfo['info2']; ?>">
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label class="form-control-label" for="input-first-name">First name</label>
-                                                <input type="text" id="input-first-name" class="form-control" placeholder="First name" value="Lucky">
+                                                <label class="form-control-label" for="input-first-name"><?php echo $infoArr[2]; ?></label>
+                                                <input type="text" id="input-first-name" class="form-control" placeholder="First name" value="<?php echo $ringkasanInfo['info3']; ?>">
                                             </div>
                                         </div>
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label class="form-control-label" for="input-last-name">Last name</label>
-                                                <input type="text" id="input-last-name" class="form-control" placeholder="Last name" value="Jesse">
+                                                <label class="form-control-label" for="input-last-name"><?php echo $infoArr[3]; ?></label>
+                                                <input type="text" id="input-last-name" class="form-control" placeholder="Last name" value="<?php if ($lvlAkses==1 || $lvlAkses==2) { $noStatus=intval($ringkasanInfo['info4']); echo $kolom_status_Arr[$noStatus]; }else { echo $ringkasanInfo['info4']; }  ?>">
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <hr class="my-4" />
                                 <!-- Address -->
-                                <h6 class="heading-small text-muted mb-4">Contact information</h6>
+                                <h6 class="heading-small text-muted mb-4"></h6>
                                 <div class="pl-lg-4">
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <label class="form-control-label" for="input-address">Address</label>
-                                                <input id="input-address" class="form-control" placeholder="Home Address" value="Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09" type="text">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-lg-4">
-                                            <div class="form-group">
-                                                <label class="form-control-label" for="input-city">City</label>
-                                                <input type="text" id="input-city" class="form-control" placeholder="City" value="New York">
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-4">
-                                            <div class="form-group">
-                                                <label class="form-control-label" for="input-country">Country</label>
-                                                <input type="text" id="input-country" class="form-control" placeholder="Country" value="United States">
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-4">
-                                            <div class="form-group">
-                                                <label class="form-control-label" for="input-country">Postal code</label>
-                                                <input type="number" id="input-postal-code" class="form-control" placeholder="Postal code">
-                                            </div>
-                                        </div>
-                                    </div>
+                                    
                                 </div>
                                 <hr class="my-4" />
-                                <!-- Description -->
-                                <h6 class="heading-small text-muted mb-4">About me</h6>
-                                <div class="pl-lg-4">
-                                    <div class="form-group">
-                                        <label class="form-control-label">About Me</label>
-                                        <textarea rows="4" class="form-control" placeholder="A few words about you ...">A beautiful Dashboard for Bootstrap 4. It is Free and Open Source.</textarea>
-                                    </div>
-                                </div>
+
                             </form>
                         </div>
                     </div>

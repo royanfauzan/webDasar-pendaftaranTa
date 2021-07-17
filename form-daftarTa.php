@@ -24,7 +24,7 @@
     <!-- page info -->
     <?php
     session_start();
-    if ($_SESSION['lvAkses'] == 1) {
+    if ($_SESSION['lvAkses'] > 0 && $_SESSION['lvAkses'] < 3) {
         include 'koneksi.php';
         $namaHalaman = "Dashboard";
 

@@ -43,7 +43,7 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="list-Ta.php">
-                                <i class="ni ni-single-copy-04 text-orange"></i>
+                                <i class="ni ni-archive-2 text-orange"></i>
                                 <span class="nav-link-text">List TA</span>
                             </a>
                         </li>
@@ -59,7 +59,7 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="list-Ta.php">
-                        <i class="ni ni-single-copy-04 text-primary"></i>
+                        <i class="ni ni-archive-2 text-primary"></i>
                         <span class="nav-link-text">List TA</span>
                     </a>
                 </li>
@@ -69,8 +69,14 @@
             ?>
                 <li class="nav-item">
                     <a class="nav-link" href="list-Ta.php">
-                        <i class="ni ni-single-copy-04 text-orange"></i>
+                        <i class="ni ni-archive-2 text-primary"></i>
                         <span class="nav-link-text">List TA</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="list-Ta-Adm.php">
+                        <i class="ni ni-single-copy-04 text-orange"></i>
+                        <span class="nav-link-text">Konfirmasi File TA</span>
                     </a>
                 </li>
                 </ul>
@@ -84,25 +90,25 @@
                 <ul class="navbar-nav mb-md-3">
                     <li class="nav-item">
                         <a class="nav-link" href="form-tambah-mahasiswa.php">
-                            <i class="ni ni-spaceship"></i>
+                            <i class="ni ni-hat-3"></i>
                             <span class="nav-link-text">Data Mahasiswa</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="form-tambah-dosen.php">
-                            <i class="ni ni-palette"></i>
+                            <i class="ni ni-single-02"></i>
                             <span class="nav-link-text">Data Dosen</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="form-tambah-prodi.php">
-                            <i class="ni ni-palette"></i>
-                            <span class="nav-link-text">Data Dosen</span>
+                            <i class="ni ni-building"></i>
+                            <span class="nav-link-text">Data Prodi</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="form-tambah-pegawai.php">
-                            <i class="ni ni-palette"></i>
+                            <i class="ni ni-user-run"></i>
                             <span class="nav-link-text">Data Pegawai</span>
                         </a>
                     </li>
@@ -118,7 +124,7 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="list-Ta.php">
-                        <i class="ni ni-single-copy-04 text-orange"></i>
+                        <i class="ni ni-archive-2 text-orange"></i>
                         <span class="nav-link-text">List TA</span>
                     </a>
                 </li>
