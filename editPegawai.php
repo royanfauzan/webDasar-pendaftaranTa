@@ -1,9 +1,9 @@
 <?php
 include 'koneksi.php';
-$nama = $_POST['nama'];
+$nama = mysqli_real_escape_string($koneksi,strip_tags($_POST['nama']));
 $nip = $_POST['nip'];
-$email = $_POST['email'];
-$noHp = $_POST['noHp'];
+$email = mysqli_real_escape_string($koneksi,strip_tags($_POST['email']));
+$noHp = mysqli_real_escape_string($koneksi,strip_tags($_POST['noHp']));
 
 
 mysqli_query($koneksi,"update pegawai set namaPegawai='$nama', emailPegawai='$email', noHpPegawai='$noHp' where nip='$nip'");

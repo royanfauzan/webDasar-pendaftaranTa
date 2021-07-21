@@ -194,7 +194,7 @@
                                 <img alt="Image placeholder" src="assets/img/theme/bootstrap.jpg">
                             </span>
                             <div class="media-body  ml-2  d-none d-lg-block">
-                                <span class="mb-0 text-sm  font-weight-bold"><?php echo $d4['nama'.$kolom_id]; ?></span>
+                                <span class="mb-0 text-sm  font-weight-bold"><?php echo explode(" ",trim($d4['nama'.$kolom_id]))[0]; ?></span>
                             </div>
                         </div>
                     </a>

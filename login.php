@@ -23,7 +23,10 @@
 <body class="bg-default g-sidenav-hidden">
     <!-- page info -->
     <?php
+    session_start();
     $namaHalaman = "Halaman Depan";
+    if (!isset($_SESSION['id_user'])) {
+    
     ?>
 
     <!-- Navbar -->
@@ -137,7 +140,13 @@
             </div>
         </div>
     </footer>
+    <?php 
+    
+    } else {
+        header('location:dashboard.php');
+    }
 
+    ?>
 
 
 

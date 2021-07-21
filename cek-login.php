@@ -2,8 +2,8 @@
 session_start();
 include 'koneksi.php';
 
-$username = $_POST['username'];
-$password = $_POST['password'];
+$username = mysqli_real_escape_string($koneksi,strip_tags($_POST['username']));
+$password = mysqli_real_escape_string($koneksi,strip_tags($_POST['password']));
 
 
 $data = mysqli_query($koneksi,"select * from pengguna where `username` = '$username' AND passwordPengguna = '$password'");

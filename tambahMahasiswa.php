@@ -1,9 +1,9 @@
 <?php
 include 'koneksi.php';
-$nama = $_POST['nama'];
-$nim = $_POST['nim'];
-$email = $_POST['email'];
-$noHp = $_POST['noHp'];
+$nama = mysqli_real_escape_string($koneksi,strip_tags($_POST['nama']));
+$nim = mysqli_real_escape_string($koneksi,strip_tags($_POST['nim']));
+$email = mysqli_real_escape_string($koneksi,strip_tags($_POST['email']));
+$noHp = mysqli_real_escape_string($koneksi,strip_tags($_POST['noHp']));
 $prodiMhs = $_POST['prodiMhs'];
 
 $statusMhs = 'Aktif';

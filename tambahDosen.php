@@ -1,9 +1,9 @@
 <?php
 include 'koneksi.php';
-$nama = $_POST['nama'];
-$nip = $_POST['nip'];
-$email = $_POST['email'];
-$noHp = $_POST['noHp'];
+$nama = mysqli_real_escape_string($koneksi,strip_tags($_POST['nama']));
+$nip = mysqli_real_escape_string($koneksi,strip_tags($_POST['nip']));
+$email = mysqli_real_escape_string($koneksi,strip_tags($_POST['email']));
+$noHp = mysqli_real_escape_string($koneksi,strip_tags($_POST['noHp']));
 $pass = $nip."!dsn";
 $lvl = 3;
 

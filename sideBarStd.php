@@ -43,7 +43,7 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="list-Ta.php">
-                                <i class="ni ni-archive-2 text-orange"></i>
+                                <i class="ni ni-archive-2 text-primary"></i>
                                 <span class="nav-link-text">List TA</span>
                             </a>
                         </li>
@@ -124,7 +124,7 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="list-Ta.php">
-                        <i class="ni ni-archive-2 text-orange"></i>
+                        <i class="ni ni-archive-2 text-primary"></i>
                         <span class="nav-link-text">List TA</span>
                     </a>
                 </li>

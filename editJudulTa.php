@@ -5,7 +5,7 @@ include 'koneksi.php';
 $nim = $_SESSION['id_user'];
 
 #dari Form
-$judul = $_POST['judul'];
+$judul = mysqli_real_escape_string($koneksi,strip_tags($_POST['judul']));
 $pembimbing1 = $_POST['pembimbing1'];
 $pembimbing2 = $_POST['pembimbing2'];
 

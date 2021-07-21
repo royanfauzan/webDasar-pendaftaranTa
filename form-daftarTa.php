@@ -444,6 +444,8 @@
         <?php
                 $no++;
             }
+        }else {
+            header('location:login.php');
         }
         ?>
 

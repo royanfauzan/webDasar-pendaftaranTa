@@ -9,8 +9,8 @@ $kolom_id = $kolom_id_Arr[$lvlAkses];
 $tabel = $_SESSION['tabel'];
 $fk = $_SESSION['fk_user'];
 $id_user = $_SESSION['id_user'];
-$email = $_POST['email'];
-$noHp = $_POST['noHp'];
+$email = mysqli_real_escape_string($koneksi,strip_tags($_POST['email']));
+$noHp = mysqli_real_escape_string($koneksi,strip_tags($_POST['noHp']));
 
 $query = "update $tabel set email".$kolom_id."='$email', noHp".$kolom_id."='$noHp' where $fk = '$id_user'";
 

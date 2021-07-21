@@ -1,8 +1,8 @@
 <?php
 include 'koneksi.php';
-$nama = $_POST['nama'];
-$nip = $_POST['nipKaprodi'];
-$kodeProdi = $_POST['kodeProdi'];
+$nama = mysqli_real_escape_string($koneksi,strip_tags($_POST['nama']));
+$nip = mysqli_real_escape_string($koneksi,strip_tags($_POST['nipKaprodi']));
+$kodeProdi = mysqli_real_escape_string($koneksi,strip_tags($_POST['kodeProdi']));
 
 $data = mysqli_query($koneksi,"select * from prodi where kodeProdi = '$kodeProdi'");
 
