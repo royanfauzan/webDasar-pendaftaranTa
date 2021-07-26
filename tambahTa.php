@@ -7,7 +7,6 @@ $nim = $_SESSION['id_user'];
 #dari Form
 $judul = mysqli_real_escape_string($koneksi,strip_tags($_POST['judul']));
 $pembimbing1 = $_POST['pembimbing1'];
-$pembimbing2 = $_POST['pembimbing2'];
 
 $statusTa = 1;
 $tanggal = date("Y-m-d");
@@ -26,7 +25,7 @@ if ($cek>0) {
     setcookie('nim',$nim,$expire);
     header("location:form-daftarTa.php");
 } else {
-    mysqli_query($koneksi,"insert into tugasAkhir(nimMhs, judulTa, tanggaldaftar, statusTa, pembimbing1, pembimbing2, kodeProdiTa) values('$nim','$judul','$tanggal','$statusTa','$pembimbing1','$pembimbing2','$kodeProdi')");
+    mysqli_query($koneksi,"insert into tugasAkhir(nimMhs, judulTa, tanggaldaftar, statusTa, pembimbing1, kodeProdiTa) values('$nim','$judul','$tanggal','$statusTa','$pembimbing1','$kodeProdi')");
     $expire = time()+5;
     setcookie('status',1,$expire);
     setcookie('nim',$nim,$expire);

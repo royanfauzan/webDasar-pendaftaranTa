@@ -29,6 +29,21 @@
         include 'koneksi.php';
         $namaHalaman = "Dashboard";
 
+        $pencarian = "";
+        $alamatCari = "";
+
+        if ( isset($_POST['cari'])) {
+            $cari = trim($_POST['cari']);
+            $pencarian=" WHERE tugasAkhir.judulTa LIKE '%$cari%' OR tugasAkhir.kodeProdiTa LIKE '%$cari%' OR mahasiswa.namaMhs LIKE '%$cari%' OR prodi.namaProdi LIKE '%$cari%'";
+            $alamatCari="&cari=$cari";
+        }
+
+        if (isset($_GET['cari'])) {
+            $cari = trim($_GET['cari']);
+            $pencarian=" WHERE tugasAkhir.judulTa LIKE '%$cari%' OR tugasAkhir.kodeProdiTa LIKE '%$cari%' OR mahasiswa.namaMhs LIKE '%$cari%' OR prodi.namaProdi LIKE '%$cari%'";
+            $alamatCari="&cari=$cari";
+        }
+
         $lvlAkses = $_SESSION['lvAkses'];
 
         $kolom_id_Arr = array(" ", "Mhs", "Mhs", "Dosen", "Pegawai", "Dosen");
@@ -97,6 +112,12 @@
                                 <div class="col-4">
                                     <h3 class="mb-0">Tugas Akhir</h3>
                                 </div>
+                                <div>
+                                    <form class="form-inline" method="post" action="?">
+                                        <input name="cari" class="form-control mr-sm-2" type="search" placeholder="<?php echo isset($_GET['cari'])?$_GET['cari']:( isset($_POST['cari'])?$_POST['cari']:"Cari"); ?>" aria-label="Search">
+                                        <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Cari</button>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                         <div class="table-responsive">
@@ -126,11 +147,11 @@
                                         $posisi = ($halaman - 1) * $batas;
                                     }
                                     // HItung jumlah data dan pembuatan halaman (link)
-                                    $data = mysqli_query($koneksi, "select * from tugasAkhir join mahasiswa on tugasAkhir.nimMhs = mahasiswa.nim Left join prodi on kodeprodita = kodeprodi where statusTa=3");
+                                    $data = mysqli_query($koneksi, "select * from (SELECT * FROM tugasAkhir left join mahasiswa on tugasAkhir.nimMhs = mahasiswa.nim Left join prodi on kodeprodita = kodeprodi $pencarian) AS tbFilter where tbFilter.statusTa=3");
                                     $jumlahData = mysqli_num_rows($data);
                                     $jumlahHalaman = ceil($jumlahData / $batas);
 
-                                    $data = mysqli_query($koneksi, "select * from tugasAkhir left join mahasiswa on tugasAkhir.nimMhs = mahasiswa.nim Left join prodi on kodeprodita = kodeprodi where statusTa=3 LIMIT $posisi,$batas");
+                                    $data = mysqli_query($koneksi, "select * from (SELECT * FROM tugasAkhir left join mahasiswa on tugasAkhir.nimMhs = mahasiswa.nim Left join prodi on kodeprodita = kodeprodi $pencarian) AS tbFilter where tbFilter.statusTa=3 LIMIT $posisi,$batas");
                                     if ($jumlahData > 0) {
 
                                         while ($d = mysqli_fetch_array($data)) {
@@ -162,7 +183,7 @@
                                         ?>
                                         <tr>
                                             <td colspan="5">
-                                                <p class='text-success text-center font-weight-700'>Belum Ada Pengajuan Judul Baru</p>
+                                                <p class='text-warning text-center font-weight-700'>Data yang dicari tidak ditemukan</p>
                                             </td>
                                         </tr>
                                     <?php
@@ -182,15 +203,46 @@
                                 <ul class="pagination">
                                 ';
 
-                                for ($i = 1; $i <= $jumlahHalaman; $i++) {
-                                    if ($i != $halaman) {
-                                        echo "<li class='page-item'><a class='page-link' href='form-tambah-Mahasiswa.php?halaman=$i'>$i</a></li>";
-                                    } else {
-                                        echo "<li class='page-item active'>
-                                        <a class='page-link' href='#'>$i <span class='sr-only'>(current)</span></a>
-                                        </li>";
+                                if ($jumlahHalaman>3) {
+                                    $awalHalaman = (ceil($halaman/3)*3)-2;                             
+                                    $batasHalaman = (ceil($halaman/3)*3);
+                                    $nextPaging = $batasHalaman+1;
+                                    $sisaHalaman = $jumlahHalaman - $batasHalaman;
+                                    
+
+                                    if ($sisaHalaman<=0) {
+                                        $batasHalaman = $jumlahHalaman;
+                                    }
+
+                                    
+                                    if ($halaman>3) {
+                                        $halSebelum = floor($halaman/3)*3;
+                                        echo "<li class='page-item'><a class='page-link' href='list-Ta.php?halaman=$halSebelum$alamatCari'>...</a></li>";
+                                    }
+                                    for ($i = $awalHalaman; $i <= $batasHalaman; $i++) {
+                                        if ($i != $halaman) {
+                                            echo "<li class='page-item'><a class='page-link' href='list-Ta.php?halaman=$i$alamatCari'>$i</a></li>";
+                                        } else {
+                                            echo "<li class='page-item active'>
+                                            <a class='page-link' href='#'>$i <span class='sr-only'>(current)</span></a>
+                                            </li>";
+                                        }
+                                    }
+                                    if ($sisaHalaman>0) {
+                                        echo "<li class='page-item'><a class='page-link' href='list-Ta.php?halaman=$nextPaging$alamatCari'>...</a></li>";
+                                    }
+                                } else {
+                                    for ($i = 1; $i <= $jumlahHalaman; $i++) {
+                                        if ($i != $halaman) {
+                                            echo "<li class='page-item'><a class='page-link' href='list-Ta.php?halaman=$i$alamatCari'>$i</a></li>";
+                                        } else {
+                                            echo "<li class='page-item active'>
+                                            <a class='page-link' href='#'>$i <span class='sr-only'>(current)</span></a>
+                                            </li>";
+                                        }
                                     }
                                 }
+                                
 
                                 echo '
                                 </ul>
@@ -269,7 +321,7 @@
                                             <?php
                                             if (file_exists($d['abstrak'])) {
                                             ?>
-                                                <a href="<?php echo $d['abstrak']; ?>" class="btn btn-sm btn-success"><?php echo pathinfo($d['abstrak'],PATHINFO_BASENAME); ?></a>
+                                                <a href="<?php echo $d['abstrak']; ?>" class="btn btn-sm btn-success"><?php echo pathinfo($d['abstrak'], PATHINFO_BASENAME); ?></a>
                                             <?php
                                             } else {
                                                 echo "File Abstrak Tidak Ditemukan!!";
@@ -281,9 +333,9 @@
                                     <div class="form-group">
                                         <h4 class="text-muted font-weight-bold"> File FullPaper :
                                             <?php
-                                            if (file_exists($d['fullpaper']) && $lvlAkses > 1 ) {
-                                                ?>
-                                                <a href="<?php echo $d['fullpaper']; ?>" class="btn btn-sm btn-success"><?php echo pathinfo($d['fullpaper'],PATHINFO_BASENAME); ?></a>
+                                            if (file_exists($d['fullpaper']) && $lvlAkses > 1) {
+                                            ?>
+                                                <a href="<?php echo $d['fullpaper']; ?>" class="btn btn-sm btn-success"><?php echo pathinfo($d['fullpaper'], PATHINFO_BASENAME); ?></a>
                                             <?php
                                             } else {
                                                 echo "Tidak Tersedia";
@@ -350,7 +402,7 @@
         <?php
                 $no++;
             }
-        }else {
+        } else {
             header('location:login.php');
         }
         ?>

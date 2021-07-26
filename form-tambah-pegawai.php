@@ -24,265 +24,224 @@
     <!-- page info -->
     <?php
     session_start();
-    if ($_SESSION['lvAkses']==4) {
-    include 'koneksi.php';
-    $namaHalaman = "Dashboard";
+    if ($_SESSION['lvAkses'] == 4) {
+        include 'koneksi.php';
+        $namaHalaman = "Dashboard";
 
-    $lvlAkses = $_SESSION['lvAkses'];
-    
-    $kolom_id_Arr = array(" ", "Mhs","Mhs","Dosen","Pegawai","Dosen");
-    $kolom_id = $kolom_id_Arr[$lvlAkses];
-    $tabel = $_SESSION['tabel'];
-    $fk = $_SESSION['fk_user'];
-    $id_user = $_SESSION['id_user'];
-    $data3 = mysqli_query($koneksi, "select * from $tabel where $fk='$id_user'");
-    $d4 = mysqli_fetch_array($data3);
-    $namaHalaman = "Halaman Pegawai";
+        $lvlAkses = $_SESSION['lvAkses'];
+
+        $kolom_id_Arr = array(" ", "Mhs", "Mhs", "Dosen", "Pegawai", "Dosen");
+        $kolom_id = $kolom_id_Arr[$lvlAkses];
+        $tabel = $_SESSION['tabel'];
+        $fk = $_SESSION['fk_user'];
+        $id_user = $_SESSION['id_user'];
+        $data3 = mysqli_query($koneksi, "select * from $tabel where $fk='$id_user'");
+        $d4 = mysqli_fetch_array($data3);
+        $namaHalaman = "Halaman Pegawai";
     ?>
 
-    <!-- Side Bar -->
-    <?php include('sideBarStd.php'); ?>
+        <!-- Side Bar -->
+        <?php include('sideBarStd.php'); ?>
 
-    <!-- COntent -->
-    <div class="main-content" id="panel">
+        <!-- COntent -->
+        <div class="main-content" id="panel">
 
-        <!-- navbar -->
-        <?php include('navbarStd.php'); ?>
+            <!-- navbar -->
+            <?php include('navbarStd.php'); ?>
 
-        <div class="container-fluid padding-nol">
+            <div class="container-fluid padding-nol">
 
 
-            <div class="row justify-content-center margin-kosong">
-                <div class="col-6">
-                    <div class="card-body px-lg-5 py-lg-5 ">
-                        <div class="text-center mb-4">
-                            <h1 class="text-primary font-weight-bold">Manajemen Data Pegawai</h1>
-                        </div>
-                        <div class="text-center text-muted font-italic">
-                            <small>
+                <div class="row justify-content-center margin-kosong">
+                    <div class="col-6">
+                        <div class="card-body px-lg-5 py-lg-5 ">
+                            <div class="text-center mb-4">
+                                <h1 class="text-primary font-weight-bold">Manajemen Data Pegawai</h1>
+                            </div>
+                            <div class="text-center text-muted font-italic">
+                                <small>
 
-                                <?php
-                                if (isset($_COOKIE['status'])) {
-                                    if ($_COOKIE['status'] == 1) {
-                                        echo "<span class='text-success font-weight-700'>Data " . $_COOKIE['nip'] . " Berhasil Disimpan </span>";
-                                    } else if ($_COOKIE['status'] == 2) {
-                                        echo "<span class='text-success font-weight-700'>Data " . $_COOKIE['nip'] . " telah di Perbarui </span>";
-                                    }else if ($_COOKIE['status'] == 3) {
-                                        echo "<span class='text-success font-weight-700'>Data " . $_COOKIE['nip'] . " telah di Hapus </span>";
+                                    <?php
+                                    if (isset($_COOKIE['status'])) {
+                                        if ($_COOKIE['status'] == 1) {
+                                            echo "<span class='text-success font-weight-700'>Data " . $_COOKIE['nip'] . " Berhasil Disimpan </span>";
+                                        } else if ($_COOKIE['status'] == 2) {
+                                            echo "<span class='text-success font-weight-700'>Data " . $_COOKIE['nip'] . " telah di Perbarui </span>";
+                                        } else if ($_COOKIE['status'] == 3) {
+                                            echo "<span class='text-success font-weight-700'>Data " . $_COOKIE['nip'] . " telah di Hapus </span>";
+                                        } else {
+                                            echo "<span class='text-danger font-weight-700'>Data " . $_COOKIE['nip'] . " Sudah ada! </span>";
+                                        }
                                     } else {
-                                        echo "<span class='text-danger font-weight-700'>Data " . $_COOKIE['nip'] . " Sudah ada! </span>";
+                                        echo " ";
                                     }
-                                } else {
-                                    echo " ";
-                                }
-                                ?>
+                                    ?>
 
-                            </small>
+                                </small>
+                            </div>
+
                         </div>
-
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="row justify-content-center margin-kosong">
-            <div class="col">
-                <div class="card">
-                    <div class="card-header border-0">
-                        <div class="row justify-content-between">
-                            <div class="col-4">
-                                <h3 class="mb-0">Data Pegawai</h3>
-                            </div>
-                            <div class="col-3">
-                                <!-- Button trigger modal -->
-                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#menambahDataPegawai">
-                                    Tambah Data Pegawai
-                                </button>
+            <div class="row justify-content-center margin-kosong">
+                <div class="col">
+                    <div class="card">
+                        <div class="card-header border-0">
+                            <div class="row justify-content-between">
+                                <div class="col-4">
+                                    <h3 class="mb-0">Data Pegawai</h3>
+                                </div>
+                                <div class="col-3">
+                                    <!-- Button trigger modal -->
+                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#menambahDataPegawai">
+                                        Tambah Data Pegawai
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="table-responsive">
-                        <!-- Projects table -->
-                        <table class="table align-items-center table-flush">
-                            <thead class="thead-light">
-                                <tr>
-                                    <th scope="col">Nama Pegawai</th>
-                                    <th scope="col">NIP</th>
-                                    <th scope="col">Email</th>
-                                    <th scope="col">No HP</th>
-                                    <th scope="col">Manajemen</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-
-                                <?php
-                                include 'koneksi.php';
-                                $no = 1;
-
-                                //Menentukan Batas, cek halaman dan posisi data
-                                $batas = 5;
-                                $halaman = @$_GET['halaman'];
-                                if (empty($halaman)) {
-                                    $posisi = 0;
-                                    $halaman = 1;
-                                } else {
-                                    $posisi = ($halaman - 1) * $batas;
-                                }
-
-                                // HItung jumlah data dan pembuatan halaman (link)
-                                $query2 = mysqli_query($koneksi, "select * from Pegawai");
-                                $jumlahData = mysqli_num_rows($query2);
-                                $jumlahHalaman = ceil($jumlahData / $batas);
-
-
-
-                                $data = mysqli_query($koneksi, "select * from Pegawai LIMIT $posisi,$batas");
-                                while ($d = mysqli_fetch_array($data)) {
-                                ?>
+                        <div class="table-responsive">
+                            <!-- Projects table -->
+                            <table class="table align-items-center table-flush">
+                                <thead class="thead-light">
                                     <tr>
-                                        <th scope="row">
-                                            <?php echo $d['namaPegawai']; ?>
-                                        </th>
-                                        <td>
-                                            <?php echo $d['nip']; ?>
-                                        </td>
-                                        <td>
-                                            <?php echo $d['emailPegawai']; ?>
-                                        </td>
-                                        <td>
-                                            <?php echo $d['noHpPegawai']; ?>
-                                        </td>
-                                        <td>
-                                            <a href="#editDataPegawai<?php echo $no; ?>" data-toggle="modal" class="btn btn-sm btn-warning">Edit</a>
-                                            <a href="#hapusDataPegawai<?php echo $no; ?>" data-toggle="modal" class="btn btn-sm btn-outline-danger">Hapus</a>
-                                        </td>
-
+                                        <th scope="col">Nama Pegawai</th>
+                                        <th scope="col">NIP</th>
+                                        <th scope="col">Email</th>
+                                        <th scope="col">No HP</th>
+                                        <th scope="col">Manajemen</th>
                                     </tr>
+                                </thead>
+                                <tbody>
+
+                                    <?php
+                                    include 'koneksi.php';
+                                    $no = 1;
+
+                                    //Menentukan Batas, cek halaman dan posisi data
+                                    $batas = 5;
+                                    $halaman = @$_GET['halaman'];
+                                    if (empty($halaman)) {
+                                        $posisi = 0;
+                                        $halaman = 1;
+                                    } else {
+                                        $posisi = ($halaman - 1) * $batas;
+                                    }
+
+                                    // HItung jumlah data dan pembuatan halaman (link)
+                                    $query2 = mysqli_query($koneksi, "select * from Pegawai");
+                                    $jumlahData = mysqli_num_rows($query2);
+                                    $jumlahHalaman = ceil($jumlahData / $batas);
+
+
+
+                                    $data = mysqli_query($koneksi, "select * from Pegawai LIMIT $posisi,$batas");
+                                    while ($d = mysqli_fetch_array($data)) {
+                                    ?>
+                                        <tr>
+                                            <th scope="row">
+                                                <?php echo $d['namaPegawai']; ?>
+                                            </th>
+                                            <td>
+                                                <?php echo $d['nip']; ?>
+                                            </td>
+                                            <td>
+                                                <?php echo $d['emailPegawai']; ?>
+                                            </td>
+                                            <td>
+                                                <?php echo $d['noHpPegawai']; ?>
+                                            </td>
+                                            <td>
+                                                <a href="#editDataPegawai<?php echo $no; ?>" data-toggle="modal" class="btn btn-sm btn-warning">Edit</a>
+                                                <a href="#hapusDataPegawai<?php echo $no; ?>" data-toggle="modal" class="btn btn-sm btn-outline-danger">Hapus</a>
+                                            </td>
+
+                                        </tr>
+                                    <?php
+                                        $no++;
+                                    }
+                                    ?>
+
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="card-footer py-4">
+                            <div class="pagination justify-content-end mb-0">
                                 <?php
-                                    $no++;
-                                }
-                                ?>
-
-
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="card-footer py-4">
-                        <div class="pagination justify-content-end mb-0">
-                            <?php
-                            echo '
+                                echo '
                                 <nav aria-label="Page navigation example">
                                 <ul class="pagination">
                                 ';
 
-                            for ($i = 1; $i <= $jumlahHalaman; $i++) {
-                                if ($i != $halaman) {
-                                    echo "<li class='page-item'><a class='page-link' href='form-tambah-Pegawai.php?halaman=$i'>$i</a></li>";
-                                } else {
-                                    echo "<li class='page-item active'>
-                                        <a class='page-link' href='#'>$i <span class='sr-only'>(current)</span></a>
-                                        </li>";
-                                }
-                            }
+                                if ($jumlahHalaman > 3) {
+                                    $awalHalaman = (ceil($halaman / 3) * 3) - 2;
+                                    $batasHalaman = (ceil($halaman / 3) * 3);
+                                    $nextPaging = $batasHalaman + 1;
+                                    $sisaHalaman = $jumlahHalaman - $batasHalaman;
 
-                            echo '
+
+                                    if ($sisaHalaman <= 0) {
+                                        $batasHalaman = $jumlahHalaman;
+                                    }
+
+                                    if ($halaman > 3) {
+                                        $halSebelum = floor($halaman / 3) * 3;
+                                        echo "<li class='page-item'><a class='page-link' href='form-tambah-pegawai.php?halaman=$halSebelum'>...</a></li>";
+                                    }
+                                    for ($i = $awalHalaman; $i <= $batasHalaman; $i++) {
+                                        if ($i != $halaman) {
+                                            echo "<li class='page-item'><a class='page-link' href='form-tambah-pegawai.php?halaman=$i'>$i</a></li>";
+                                        } else {
+                                            echo "<li class='page-item active'>
+                                            <a class='page-link' href='#'>$i <span class='sr-only'>(current)</span></a>
+                                            </li>";
+                                        }
+                                    }
+                                    if ($sisaHalaman > 0) {
+                                        echo "<li class='page-item'><a class='page-link' href='form-tambah-pegawai.php?halaman=$nextPaging'>...</a></li>";
+                                    }
+                                } else {
+                                    for ($i = 1; $i <= $jumlahHalaman; $i++) {
+                                        if ($i != $halaman) {
+                                            echo "<li class='page-item'><a class='page-link' href='form-tambah-pegawai.php?halaman=$i'>$i</a></li>";
+                                        } else {
+                                            echo "<li class='page-item active'>
+                                            <a class='page-link' href='#'>$i <span class='sr-only'>(current)</span></a>
+                                            </li>";
+                                        }
+                                    }
+                                }
+
+                                echo '
                                 </ul>
                                 </nav>
                                 ';
-                            ?>
+                                ?>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Modal Menambah data -->
-        <div class="modal fade" id="menambahDataPegawai" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h2 class="text-primary font-weight-bold">Menambah Data Pegawai</h2>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form method="post" role="form" action="tambahPegawai.php">
-                            <div class="form-group">
-                                <div class="input-group input-group-merge input-group-alternative mb-3">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text"><i class="ni ni-badge"></i></span>
-                                    </div>
-                                    <input class="form-control" placeholder="NIP" type="text" name="nip">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="input-group input-group-merge input-group-alternative mb-3">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text"><i class="ni ni-circle-08"></i></span>
-                                    </div>
-                                    <input class="form-control" placeholder="Nama" type="text" name="nama">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="input-group input-group-merge input-group-alternative mb-3">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text"><i class="ni ni-email-83"></i></span>
-                                    </div>
-                                    <input class="form-control" placeholder="Email" type="text" name="email">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="input-group input-group-merge input-group-alternative">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text"><i class="ni ni-mobile-button"></i></span>
-                                    </div>
-                                    <input class="form-control" placeholder="No HP" type="text" name="noHp">
-                                </div>
-                            </div>
-                            <div class="row justify-content-end">
-                                <div class="col-8">
-                                    <button type="button" class="btn btn-secondary mt-4" data-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn btn-primary mt-4">Tambah Pegawai</button>
-
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-        <!-- Modal Edit Generator -->
-        <?php
-        $no = 1;
-        $data = mysqli_query($koneksi, "select * from Pegawai LIMIT $posisi,$batas");
-        while ($d = mysqli_fetch_array($data)) {
-        ?>
-            <div class="modal fade" id="editDataPegawai<?php echo $no;?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+            <!-- Modal Menambah data -->
+            <div class="modal fade" id="menambahDataPegawai" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h2 class="text-primary font-weight-bold">Edit Data Pegawai</h2>
+                            <h2 class="text-primary font-weight-bold">Menambah Data Pegawai</h2>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                         <div class="modal-body">
-                            <form method="post" role="form" action="editPegawai.php">
-                                <div class="form-group">
-                                    <div class="input-group input-group-merge input-group-alternative mb-3 invisible">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="ni ni-badge"></i></span>
-                                        </div>
-                                        <input class="form-control" placeholder="NIP" type="hidden" name="nip" value="<?php echo $d['nip']; ?>" >
-                                    </div>
-                                </div>
+                            <form method="post" role="form" action="tambahPegawai.php">
                                 <div class="form-group">
                                     <div class="input-group input-group-merge input-group-alternative mb-3">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="ni ni-badge"></i></span>
                                         </div>
-                                        <input class="form-control" placeholder="NIP" name="nipTampil" value="<?php echo $d['nip']; ?>" disabled>
+                                        <input class="form-control" placeholder="NIP" type="text" name="nip">
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -290,7 +249,7 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="ni ni-circle-08"></i></span>
                                         </div>
-                                        <input class="form-control" placeholder="Nama" type="text" name="nama" value="<?php echo $d['namaPegawai']; ?>">
+                                        <input class="form-control" placeholder="Nama" type="text" name="nama">
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -298,7 +257,7 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="ni ni-email-83"></i></span>
                                         </div>
-                                        <input class="form-control" placeholder="Email" type="text" name="email" value="<?php echo $d['emailPegawai']; ?>">
+                                        <input class="form-control" placeholder="Email" type="text" name="email">
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -306,13 +265,13 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="ni ni-mobile-button"></i></span>
                                         </div>
-                                        <input class="form-control" placeholder="No HP" type="text" name="noHp" value="<?php echo $d['noHpPegawai']; ?>">
+                                        <input class="form-control" placeholder="No HP" type="text" name="noHp">
                                     </div>
                                 </div>
                                 <div class="row justify-content-end">
                                     <div class="col-8">
                                         <button type="button" class="btn btn-secondary mt-4" data-dismiss="modal">Close</button>
-                                        <button type="submit" class="btn btn-primary mt-4">Update Pegawai</button>
+                                        <button type="submit" class="btn btn-primary mt-4">Tambah Pegawai</button>
 
                                     </div>
                                 </div>
@@ -322,28 +281,102 @@
                     </div>
                 </div>
             </div>
-        <?php
-        $no++;
-        }
-        ?>
+            <!-- Modal Edit Generator -->
+            <?php
+            $no = 1;
+            $data = mysqli_query($koneksi, "select * from Pegawai LIMIT $posisi,$batas");
+            while ($d = mysqli_fetch_array($data)) {
+            ?>
+                <div class="modal fade" id="editDataPegawai<?php echo $no; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h2 class="text-primary font-weight-bold">Edit Data Pegawai</h2>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form method="post" role="form" action="editPegawai.php">
+                                    <div class="form-group">
+                                        <div class="input-group input-group-merge input-group-alternative mb-3 invisible">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="ni ni-badge"></i></span>
+                                            </div>
+                                            <input class="form-control" placeholder="NIP" type="hidden" name="nip" value="<?php echo $d['nip']; ?>">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="input-group input-group-merge input-group-alternative mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="ni ni-badge"></i></span>
+                                            </div>
+                                            <input class="form-control" placeholder="NIP" name="nipTampil" value="<?php echo $d['nip']; ?>" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="input-group input-group-merge input-group-alternative mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="ni ni-circle-08"></i></span>
+                                            </div>
+                                            <input class="form-control" placeholder="Nama" type="text" name="nama" value="<?php echo $d['namaPegawai']; ?>">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="input-group input-group-merge input-group-alternative mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="ni ni-email-83"></i></span>
+                                            </div>
+                                            <input class="form-control" placeholder="Email" type="text" name="email" value="<?php echo $d['emailPegawai']; ?>">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="input-group input-group-merge input-group-alternative">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="ni ni-mobile-button"></i></span>
+                                            </div>
+                                            <input class="form-control" placeholder="No HP" type="text" name="noHp" value="<?php echo $d['noHpPegawai']; ?>">
+                                        </div>
+                                    </div>
+                                    <div class="form-check">
+                                        <input type="checkbox" name="resetPass" class="form-check-input" id="exampleCheck1">
+                                        <label class="form-check-label" for="exampleCheck1">RESET PASSWORD</label>
+                                    </div>
+                                    <div class="row justify-content-end">
+                                        <div class="col-8">
+                                            <button type="button" class="btn btn-secondary mt-4" data-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-primary mt-4">Update Pegawai</button>
 
-        <!-- Modal Hapus Generator -->
-        <?php
-        $no = 1;
-        $data = mysqli_query($koneksi, "select * from Pegawai LIMIT $posisi,$batas");
-        while ($d = mysqli_fetch_array($data)) {
-        ?>
-            <div class="modal fade" id="hapusDataPegawai<?php echo $no;?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h2 class="text-primary font-weight-bold">Edit Data Pegawai</h2>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+
                         </div>
-                        <div class="modal-body">
-                            <p>Apakah anda yakin akan menghapus data Pegawai " <span class="text-danger"><?php echo $d['namaPegawai']; ?></span> " ?</p>
+                    </div>
+                </div>
+            <?php
+                $no++;
+            }
+            ?>
+
+            <!-- Modal Hapus Generator -->
+            <?php
+            $no = 1;
+            $data = mysqli_query($koneksi, "select * from Pegawai LIMIT $posisi,$batas");
+            while ($d = mysqli_fetch_array($data)) {
+            ?>
+                <div class="modal fade" id="hapusDataPegawai<?php echo $no; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h2 class="text-primary font-weight-bold">Edit Data Pegawai</h2>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <p>Apakah anda yakin akan menghapus data Pegawai " <span class="text-danger"><?php echo $d['namaPegawai']; ?></span> " ?</p>
                                 <div class="row justify-content-end">
                                     <div class="col-8">
                                         <button type="button" class="btn btn-secondary mt-4" data-dismiss="modal">Close</button>
@@ -351,33 +384,33 @@
 
                                     </div>
                                 </div>
-                            
-                        </div>
 
+                            </div>
+
+                        </div>
                     </div>
                 </div>
-            </div>
         <?php
-        $no++;
+                $no++;
+            }
+        } else {
+            header('location:login.php');
         }
-    }else {
-        header('location:login.php');
-    }
         ?>
 
-    </div>
+        </div>
 
-    <!-- Core -->
-    <script src="assets/vendor/jquery/dist/jquery.min.js"></script>
-    <script src="assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="assets/vendor/js-cookie/js.cookie.js"></script>
-    <script src="assets/vendor/jquery.scrollbar/jquery.scrollbar.min.js"></script>
-    <script src="assets/vendor/jquery-scroll-lock/dist/jquery-scrollLock.min.js"></script>
-    <!-- Optional JS -->
-    <script src="assets/vendor/chart.js/dist/Chart.min.js"></script>
-    <script src="assets/vendor/chart.js/dist/Chart.extension.js"></script>
-    <!-- Argon JS -->
-    <script src="assets/js/argon.js?v=1.2.0"></script>
+        <!-- Core -->
+        <script src="assets/vendor/jquery/dist/jquery.min.js"></script>
+        <script src="assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="assets/vendor/js-cookie/js.cookie.js"></script>
+        <script src="assets/vendor/jquery.scrollbar/jquery.scrollbar.min.js"></script>
+        <script src="assets/vendor/jquery-scroll-lock/dist/jquery-scrollLock.min.js"></script>
+        <!-- Optional JS -->
+        <script src="assets/vendor/chart.js/dist/Chart.min.js"></script>
+        <script src="assets/vendor/chart.js/dist/Chart.extension.js"></script>
+        <!-- Argon JS -->
+        <script src="assets/js/argon.js?v=1.2.0"></script>
 </body>
 
 </html>

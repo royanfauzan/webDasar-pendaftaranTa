@@ -24,15 +24,27 @@
     <!-- page info -->
     <?php
     session_start();
-    if ($_SESSION['lvAkses'] == 5) {
+    if ($_SESSION['lvAkses'] == 5 || $_SESSION['lvAkses'] == 3) {
 
         include 'koneksi.php';
         $namaHalaman = "Dashboard";
 
         $lvlAkses = $_SESSION['lvAkses'];
 
+        function potongNama(string $teksNama)
+        {
+            $panjangteks = strlen($teksNama);
+            if ($panjangteks < 15) {
+                return $teksNama;
+            } else {
+                $posisiSpasi = strrpos($teksNama, ' ');
+                $teksbuff = substr($teksNama, 0, $posisiSpasi);
+                return potongNama($teksbuff);
+            }
+        }
+
         $kolom_id_Arr = array(" ", "Mhs", "Mhs", "Dosen", "Pegawai", "Dosen");
-        $kolom_status_Arr = array("Ditolak", "Menunggu Disetujui", "Disetujui", "Selesai");
+        $kolom_status_Arr = array("Ditolak", "Pengajuan Judul", "Disetujui", "Selesai");
         $kolom_warna_Arr = array("text-danger", "text-warning", "text-success", "text-primary", " ");
         $kolom_id = $kolom_id_Arr[$lvlAkses];
         $tabel = $_SESSION['tabel'];
@@ -40,10 +52,7 @@
         $id_user = $_SESSION['id_user'];
         $data3 = mysqli_query($koneksi, "select * from $tabel where $fk='$id_user'");
         $d4 = mysqli_fetch_array($data3);
-        $queryKaprodi = mysqli_query($koneksi, "select * from prodi where nipKaprodi ='$id_user'");
-        $dataKaprodi = mysqli_fetch_array($queryKaprodi);
-        $kodeProdi = $dataKaprodi['kodeProdi'];
-        $namaHalaman = "Pengajuan Judul";
+        $namaHalaman = "List Bimbingan";
 
     ?>
 
@@ -63,7 +72,7 @@
                     <div class="col-6">
                         <div class="card-body px-lg-5 py-lg-5 ">
                             <div class="text-center mb-4">
-                                <h1 class="text-primary font-weight-bold">Daftar Pengajuan Judul</h1>
+                                <h1 class="text-primary font-weight-bold">Mahasiswa Bimbingan</h1>
                             </div>
                             <div class="text-center text-muted font-italic">
                                 <small>
@@ -95,7 +104,7 @@
                         <div class="card-header border-0">
                             <div class="row justify-content-between">
                                 <div class="col-4">
-                                    <h3 class="mb-0">Tugas Akhir <?php echo $dataKaprodi['namaProdi']; ?></h3>
+                                    <h3 class="mb-0">List Mahasiswa</h3>
                                 </div>
                             </div>
                         </div>
@@ -104,10 +113,12 @@
                             <table class="table align-items-center table-flush">
                                 <thead class="thead-light">
                                     <tr>
-                                        <th scope="col">Judul</th>
+                                        <th scope="col">Nama</th>
                                         <th scope="col">NIM</th>
-                                        <th scope="col">Status</th>
-                                        <th scope="col">Manajemen</th>
+                                        <th scope="col">No Hp</th>
+                                        <th scope="col">Email</th>
+                                        <th scope="col">Status TA</th>
+                                        <th scope="col">Detail</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -126,11 +137,11 @@
                                         $posisi = ($halaman - 1) * $batas;
                                     }
                                     // HItung jumlah data dan pembuatan halaman (link)
-                                    $data = mysqli_query($koneksi, "select * from tugasAkhir join mahasiswa on tugasAkhir.nimMhs = mahasiswa.nim where kodeProdiTa = '$kodeProdi' AND statusTa=1");
+                                    $data = mysqli_query($koneksi, "SELECT * FROM tugasakhir JOIN mahasiswa ON tugasAkhir.nimMhs = mahasiswa.nim WHERE pembimbing1='$id_user' OR pembimbing2='$id_user' ORDER BY statusTa");
                                     $jumlahData = mysqli_num_rows($data);
                                     $jumlahHalaman = ceil($jumlahData / $batas);
 
-                                    $data = mysqli_query($koneksi, "select * from tugasAkhir left join mahasiswa on tugasAkhir.nimMhs = mahasiswa.nim where kodeProdiTa = '$kodeProdi' AND statusTa=1 ORDER BY nimMhs LIMIT $posisi,$batas");
+                                    $data = mysqli_query($koneksi, "SELECT * FROM tugasakhir JOIN mahasiswa ON tugasAkhir.nimMhs = mahasiswa.nim WHERE pembimbing1='$id_user' OR pembimbing2='$id_user' ORDER BY statusTa LIMIT $posisi,$batas");
                                     if ($jumlahData > 0) {
 
                                         while ($d = mysqli_fetch_array($data)) {
@@ -138,11 +149,17 @@
                                             <tr>
                                                 <th scope="row">
                                                     <?php
-                                                    echo substr($d['judulTa'], 0, 20);
-                                                    ?> ...
+                                                    echo PotongNama($d['namaMhs']);
+                                                    ?>
                                                 </th>
                                                 <td>
                                                     <?php echo $d['nimMhs']; ?>
+                                                </td>
+                                                <td>
+                                                    <?php echo $d['noHpMhs']; ?>
+                                                </td>
+                                                <td>
+                                                    <?php echo $d['emailMhs']; ?>
                                                 </td>
                                                 <td>
                                                     <?php
@@ -154,7 +171,6 @@
                                                 </td>
                                                 <td>
                                                     <a href="#editDataTa<?php echo $no; ?>" data-toggle="modal" class="btn btn-sm btn-warning">Detail</a>
-                                                    <a href="#hapusDataTa<?php echo $no; ?>" data-toggle="modal" class="btn btn-sm btn-outline-success">Setujui</a>
                                                 </td>
 
                                             </tr>
@@ -165,15 +181,13 @@
                                         ?>
                                         <tr>
                                             <td colspan="5">
-                                                <p class='text-success text-center font-weight-700'>Belum Ada Pengajuan Judul Baru</p>
+                                                <p class='text-success text-center font-weight-700'>Belum Bimbingan Terdaftar</p>
                                             </td>
                                         </tr>
                                     <?php
 
                                     }
                                     ?>
-
-
                                 </tbody>
                             </table>
                         </div>
@@ -209,7 +223,7 @@
             <!-- Modal Edit Generator -->
             <?php
             $no = 1;
-            $data = mysqli_query($koneksi, "select pembimbing1, judulTa, nimMhs, tanggalDaftar, dospem1.namaDosen AS 'bimbing1',dospem2.namaDosen AS 'bimbing2' from tugasAkhir Left join dosen dospem1 on tugasAkhir.pembimbing1 = dospem1.nip Left join dosen dospem2 on tugasAkhir.pembimbing2 = dospem2.nip where kodeProdiTa = '$kodeProdi' AND statusTa=1 ORDER BY nimMhs LIMIT $posisi,$batas");
+            $data = mysqli_query($koneksi, "select judulTa, nimMhs, tanggalDaftar, dospem1.namaDosen AS 'bimbing1',dospem2.namaDosen AS 'bimbing2' from tugasAkhir Left join dosen dospem1 on tugasAkhir.pembimbing1 = dospem1.nip Left join dosen dospem2 on tugasAkhir.pembimbing2 = dospem2.nip where tugasAkhir.pembimbing1='$id_user' OR tugasAkhir.pembimbing2='$id_user' ORDER BY statusTa LIMIT $posisi,$batas");
             while ($d = mysqli_fetch_array($data)) {
             ?>
                 <div class="modal fade" id="editDataTa<?php echo $no; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
@@ -250,6 +264,12 @@
                                                     <input type="text" id="input-first-name" readonly class="form-control-plaintext" placeholder="Pembimbing 1" value="<?php echo $d['bimbing1']; ?>">
                                                 </div>
                                             </div>
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label class="form-control-label" for="input-last-name">Pembimbing2</label>
+                                                    <input type="text" id="input-last-name" class="form-control-plaintext" placeholder="Pembimbing 2" value="<?php echo $d['bimbing2']; ?>">
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-lg-6">
@@ -260,40 +280,12 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <hr class="my-4">
-                                    <h6 class="heading-small text-muted mb-4">Pilih Pembimbing 2</h6>
-                                    <div class="pl-lg-4">
-                                        <div class="row">
-                                            <div class="form-group">
-                                                <div class="input-group input-group-merge input-group-alternative mb-3">
-                                                    <div class="input-group-prepend">
-                                                        <span class="input-group-text"><i class="ni ni-circle-08"></i></span>
-                                                    </div>
-                                                    <select class="custom-select" name="pembimbing2" required>
-                                                        <option value="" disabled>Pilih Pembimbing2</option>
-                                                        <?php
-                                                        $nip_bimbing1 = $d['pembimbing1'];
-                                                        $queryDsn = mysqli_query($koneksi, "select * from dosen WHERE NOT nip='$nip_bimbing1'");
-                                                        while ($dDosen = mysqli_fetch_array($queryDsn)) {
-                                                        ?>
-                                                            <option value="<?php echo $dDosen['nip']; ?>"><?php echo substr($dDosen['nip'], -3) . " | " . $dDosen['namaDosen']; ?></option>
-                                                        <?php
-                                                        }
-                                                        ?>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
                                     <hr class="my-4" />
-
                                     <!-- Address -->
                                     <h6 class="heading-small text-muted mb-4">Opsi Persetujuan</h6>
 
                                     <div class="row justify-content-between align-items-end">
                                         <button type="button" class="btn btn-secondary mt-4" data-dismiss="modal">Close</button>
-                                        <button name="persetujuan" type="submit" class="btn btn-outline-danger mr-6" value="0">Tolak</button>
-                                        <button name="persetujuan" type="submit" class="btn btn-success w-25 text-center" value="2">Setujui</button>
                                     </div>
                                 </form>
                             </div>
@@ -309,7 +301,7 @@
             <!-- Modal Hapus Generator -->
             <?php
             $no = 1;
-            $data = mysqli_query($koneksi, "select pembimbing1, judulTa, nimMhs, tanggalDaftar, dospem1.namaDosen AS 'bimbing1',dospem2.namaDosen AS 'bimbing2' from tugasAkhir Left join dosen dospem1 on tugasAkhir.pembimbing1 = dospem1.nip Left join dosen dospem2 on tugasAkhir.pembimbing2 = dospem2.nip where kodeProdiTa = '$kodeProdi' AND statusTa=1 ORDER BY nimMhs LIMIT $posisi,$batas");
+            $data = mysqli_query($koneksi, "select judulTa, nimMhs, tanggalDaftar, dospem1.namaDosen AS 'bimbing1',dospem2.namaDosen AS 'bimbing2' from tugasAkhir Left join dosen dospem1 on tugasAkhir.pembimbing1 = dospem1.nip Left join dosen dospem2 on tugasAkhir.pembimbing2 = dospem2.nip where tugasAkhir.pembimbing1='$id_user' OR tugasAkhir.pembimbing2='$id_user' LIMIT $posisi,$batas");
             while ($d = mysqli_fetch_array($data)) {
             ?>
                 <div class="modal fade" id="hapusDataTa<?php echo $no; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
@@ -330,31 +322,6 @@
                                             <input type="text" id="input-username" class="form-control" name="nim" placeholder="NIM" value="<?php echo $d['nimMhs']; ?>">
                                         </div>
                                     </div>
-                                    <hr class="my-4">
-                                    <h6 class="heading-small text-muted mb-4">Pilih Pembimbing2</h6>
-                                    <div class="pl-lg-4">
-                                        <div class="row">
-                                            <div class="form-group">
-                                                <div class="input-group input-group-merge input-group-alternative mb-3">
-                                                    <div class="input-group-prepend">
-                                                        <span class="input-group-text"><i class="ni ni-circle-08"></i></span>
-                                                    </div>
-                                                    <select class="custom-select" name="pembimbing2" required>
-                                                        <option value="" disabled>Pilih Pembimbing2</option>
-                                                        <?php
-                                                        $nip_bimbing1 = $d['pembimbing1'];
-                                                        $queryDsn = mysqli_query($koneksi, "select * from dosen WHERE NOT nip='$nip_bimbing1'");
-                                                        while ($dDosen = mysqli_fetch_array($queryDsn)) {
-                                                        ?>
-                                                            <option value="<?php echo $dDosen['nip']; ?>"><?php echo substr($dDosen['nip'], -3) . " | " . $dDosen['namaDosen']; ?></option>
-                                                        <?php
-                                                        }
-                                                        ?>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
                                     <hr class="my-4" />
                                     <!-- Address -->
                                     <h6 class="heading-small text-muted mb-4">Opsi Persetujuan</h6>
@@ -373,7 +340,7 @@
         <?php
                 $no++;
             }
-        } else {
+        }else {
             header('location:login.php');
         }
         ?>

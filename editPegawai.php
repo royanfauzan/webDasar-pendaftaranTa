@@ -5,6 +5,12 @@ $nip = $_POST['nip'];
 $email = mysqli_real_escape_string($koneksi,strip_tags($_POST['email']));
 $noHp = mysqli_real_escape_string($koneksi,strip_tags($_POST['noHp']));
 
+$passwordUlang = $nip."!pgw";
+
+if (isset($_POST['resetPass'])) {
+    mysqli_query($koneksi,"UPDATE pengguna SET passwordPengguna='$passwordUlang' where `id_user` = '$nip'");
+}
+
 
 mysqli_query($koneksi,"update pegawai set namaPegawai='$nama', emailPegawai='$email', noHpPegawai='$noHp' where nip='$nip'");
 $expire = time()+5;

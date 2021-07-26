@@ -230,24 +230,6 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <div class="input-group input-group-merge input-group-alternative mb-3">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="ni ni-circle-08"></i></span>
-                                        </div>
-                                        <select class="custom-select" name="pembimbing2" required>
-                                            <option>Pilih Pembimbing2</option>
-                                            <?php
-                                            $queryDsn = mysqli_query($koneksi, "select * from dosen");
-                                            while ($dDosen = mysqli_fetch_array($queryDsn)) {
-                                            ?>
-                                                <option value="<?php echo $dDosen['nip']; ?>"><?php echo substr($dDosen['nip'], -3) . " | " . $dDosen['namaDosen']; ?></option>
-                                            <?php
-                                            }
-                                            ?>
-                                        </select>
-                                    </div>
-                                </div>
                                 <div class="row justify-content-end">
                                     <div class="col-7">
                                         <button type="button" class="btn btn-secondary mt-4" data-dismiss="modal">Close</button>
@@ -301,29 +283,10 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <div class="input-group input-group-merge input-group-alternative mb-3">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text"><i class="ni ni-circle-08"></i></span>
-                                            </div>
-                                            <select class="custom-select" name="pembimbing2" required>
-                                                <option value="<?php echo $d['pembimbing2']; ?>"><?php echo substr($d['pembimbing2'], -3) . " | " . $d['bimbing2']; ?></option>
-                                                <?php
-                                                $queryDsn = mysqli_query($koneksi, "select * from dosen");
-                                                while ($dDosen = mysqli_fetch_array($queryDsn)) {
-                                                ?>
-                                                    <option value="<?php echo $dDosen['nip']; ?>"><?php echo substr($dDosen['nip'], -3) . " | " . $dDosen['namaDosen']; ?></option>
-                                                <?php
-                                                }
-                                                ?>
-                                            </select>
-                                        </div>
-                                    </div>
                                     <div class="row justify-content-end">
                                         <div class="col-7">
                                             <button type="button" class="btn btn-secondary mt-4" data-dismiss="modal">Close</button>
                                             <button type="submit" class="btn btn-primary mt-4">Perbaiki Ta</button>
-
                                         </div>
                                     </div>
                                 </form>
@@ -412,38 +375,7 @@
             ?>
 
             <!-- Modal Hapus Generator -->
-            <?php
-            $no = 1;
-            $data = mysqli_query($koneksi, "select * from tugasAkhir where nimMhs='$id_user'");
-            while ($d = mysqli_fetch_array($data)) {
-            ?>
-                <div class="modal fade" id="hapusDataTa<?php echo $no; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h2 class="text-primary font-weight-bold">Edit Data Ta</h2>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <p>Apakah anda yakin akan menghapus data Ta " <span class="text-danger"><?php echo $d['namaTa']; ?></span> " ?</p>
-                                <div class="row justify-content-end">
-                                    <div class="col-7">
-                                        <button type="button" class="btn btn-secondary mt-4" data-dismiss="modal">Close</button>
-                                        <a href="hapusTa.php?nip=<?php echo $d['nip']; ?>" class="btn btn-danger mt-4">Hapus</a>
-
-                                    </div>
-                                </div>
-
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
         <?php
-                $no++;
-            }
         }else {
             header('location:login.php');
         }

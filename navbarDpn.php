@@ -60,7 +60,8 @@
                         <span class="nav-link-inner--text d-lg-none">Github</span>
                     </a>
                 </li>
-                <li class="nav-item d-none d-lg-block ml-lg-4">
+                <div class="dropdown-divider"></div>
+                <li class="nav-item d-lg-block ml-lg-4">
                     <a href="login.php" class="btn btn-neutral btn-icon">
                         <span class="btn-inner--icon">
                             <i class="ni ni-circle-08"></i>

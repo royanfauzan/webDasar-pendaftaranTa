@@ -2,8 +2,14 @@
 include 'koneksi.php';
 $nim = $_POST['nim'];
 $persetujuan = $_POST['persetujuan'];
+$pembimbing2 = $_POST['pembimbing2'];
+$queryBimbing = "";
 
-$cekQuery = mysqli_query($koneksi,"update tugasAkhir set statusTa='$persetujuan' where nimMhs = '$nim'");
+if ($persetujuan=="2") {
+    $queryBimbing = ", pembimbing2 = '$pembimbing2'";
+}
+
+$cekQuery = mysqli_query($koneksi,"update tugasAkhir set statusTa='$persetujuan'$queryBimbing where nimMhs = '$nim'");
 
 if ($cekQuery) {
     $expire = time()+5;

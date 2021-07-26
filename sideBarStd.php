@@ -52,8 +52,8 @@
                     } else if ($lvlAkses == 3) {
             ?>
                 <li class="nav-item">
-                    <a class="nav-link" href="list-Bimbingan.php">
-                        <i class="ni ni-collection text-orange"></i>
+                    <a class="nav-link" href="list-bimbingan.php">
+                        <i class="ni ni-bullet-list-67 text-orange"></i>
                         <span class="nav-link-text">List Bimbingan</span>
                     </a>
                 </li>
@@ -68,15 +68,15 @@
                     } else if ($lvlAkses == 4) {
             ?>
                 <li class="nav-item">
-                    <a class="nav-link" href="list-Ta.php">
-                        <i class="ni ni-archive-2 text-primary"></i>
-                        <span class="nav-link-text">List TA</span>
-                    </a>
-                </li>
-                <li class="nav-item">
                     <a class="nav-link" href="list-Ta-Adm.php">
                         <i class="ni ni-single-copy-04 text-orange"></i>
                         <span class="nav-link-text">Konfirmasi File TA</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="list-Ta.php">
+                        <i class="ni ni-archive-2 text-primary"></i>
+                        <span class="nav-link-text">List TA</span>
                     </a>
                 </li>
                 </ul>
@@ -116,10 +116,16 @@
             <?php
                     } else if ($lvlAkses == 5) {
             ?>
-                    <li class="nav-item">
+                <li class="nav-item">
                     <a class="nav-link" href="list-pengajuan-judul.php">
-                        <i class="ni ni-planet text-orange"></i>
+                        <i class="ni ni-collection text-orange"></i>
                         <span class="nav-link-text">Pengajuan Judul</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="list-bimbingan.php">
+                        <i class="ni ni-bullet-list-67 text-orange"></i>
+                        <span class="nav-link-text">List Bimbingan</span>
                     </a>
                 </li>
                 <li class="nav-item">

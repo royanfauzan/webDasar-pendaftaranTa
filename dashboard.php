@@ -53,7 +53,7 @@
 
         #data Ringkasan
         if ($lvlAkses == 1 || $lvlAkses == 2) {
-            $queryInfo = "SELECT nimMhs AS info1,namaProdi AS info2,judulTa AS info3,statusta AS info4 FROM tugasakhir JOIN prodi ON tugasakhir.`kodeProdiTa` = prodi.`kodeProdi` WHERE nimMhs ='$id_user'";
+            $queryInfo = "SELECT nim AS info1,namaProdi AS info2,judulTa AS info3,statusta AS info4 FROM mahasiswa LEFT JOIN tugasakhir ON mahasiswa.nim = tugasAkhir.`nimMhs` LEFT JOIN prodi ON mahasiswa.`prodiMhs` = prodi.`kodeProdi` WHERE nim ='$id_user'";
             $infoArr = array("NIM", "Program Studi", "Judul Tugas Akhir", "Status TA");
         } elseif ($lvlAkses == 3) {
             $queryInfo = "SELECT nip AS info1,(SELECT COUNT(filter.nimMhs) FROM (SELECT * FROM tugasakhir WHERE pembimbing1='$id_user' OR pembimbing2='$id_user') AS filter WHERE filter.statusTa=1 OR filter.statusTa=2) AS info2,(SELECT COUNT(filter.nimMhs) FROM (SELECT * FROM tugasakhir WHERE pembimbing1='$id_user' OR pembimbing2='$id_user') AS filter) AS info3,(SELECT COUNT(filter.nimMhs) FROM (SELECT * FROM tugasakhir WHERE pembimbing1='$id_user' OR pembimbing2='$id_user') AS filter WHERE filter.statusTa=3) AS info4 FROM dosen WHERE nip='$id_user'";
@@ -186,15 +186,17 @@
                                             <div class="col-lg-6">
                                                 <div class="form-group">
                                                     <label class="form-control-label" for="input-first-name"><?php echo $infoArr[2]; ?></label>
-                                                    <input type="text" id="input-first-name" class="form-control" placeholder="First name" value="<?php echo $ringkasanInfo['info3']; ?>">
+                                                    <input type="text" id="input-first-name" class="form-control" placeholder="-" value="<?php echo $ringkasanInfo['info3']; ?>">
                                                 </div>
                                             </div>
                                             <div class="col-lg-6">
                                                 <div class="form-group">
                                                     <label class="form-control-label" for="input-last-name"><?php echo $infoArr[3]; ?></label>
-                                                    <input type="text" id="input-last-name" class="form-control" placeholder="Last name" value="<?php if ($lvlAkses == 1 || $lvlAkses == 2) {
+                                                    <input type="text" id="input-last-name" class="form-control" placeholder="-" value="<?php if ($lvlAkses == 1 || $lvlAkses == 2) {
                                                                                                                                                     $noStatus = intval($ringkasanInfo['info4']);
-                                                                                                                                                    echo $kolom_status_Arr[$noStatus];
+                                                                                                                                                    if (!empty($ringkasanInfo['info3'])) {
+                                                                                                                                                        echo $kolom_status_Arr[$noStatus];
+                                                                                                                                                    }
                                                                                                                                                 } else {
                                                                                                                                                     echo $ringkasanInfo['info4'];
                                                                                                                                                 }  ?>">

@@ -180,15 +180,44 @@
                                 <ul class="pagination">
                                 ';
 
-                            for ($i = 1; $i <= $jumlahHalaman; $i++) {
-                                if ($i != $halaman) {
-                                    echo "<li class='page-item'><a class='page-link' href='form-tambah-Mahasiswa.php?halaman=$i'>$i</a></li>";
+                                if ($jumlahHalaman>3) {
+                                    $awalHalaman = (ceil($halaman/3)*3)-2;                             
+                                    $batasHalaman = (ceil($halaman/3)*3);
+                                    $nextPaging = $batasHalaman+1;
+                                    $sisaHalaman = $jumlahHalaman - $batasHalaman;
+                                    
+
+                                    if ($sisaHalaman<=0) {
+                                        $batasHalaman = $jumlahHalaman;
+                                    }
+
+                                    if ($halaman>3) {
+                                        $halSebelum = floor($halaman/3)*3;
+                                        echo "<li class='page-item'><a class='page-link' href='form-tambah-Mahasiswa.php?halaman=$halSebelum'>...</a></li>";
+                                    }
+                                    for ($i = $awalHalaman; $i <= $batasHalaman; $i++) {
+                                        if ($i != $halaman) {
+                                            echo "<li class='page-item'><a class='page-link' href='form-tambah-Mahasiswa.php?halaman=$i'>$i</a></li>";
+                                        } else {
+                                            echo "<li class='page-item active'>
+                                            <a class='page-link' href='#'>$i <span class='sr-only'>(current)</span></a>
+                                            </li>";
+                                        }
+                                    }
+                                    if ($sisaHalaman>0) {
+                                        echo "<li class='page-item'><a class='page-link' href='form-tambah-Mahasiswa.php?halaman=$nextPaging'>...</a></li>";
+                                    }
                                 } else {
-                                    echo "<li class='page-item active'>
-                                        <a class='page-link' href='#'>$i <span class='sr-only'>(current)</span></a>
-                                        </li>";
+                                    for ($i = 1; $i <= $jumlahHalaman; $i++) {
+                                        if ($i != $halaman) {
+                                            echo "<li class='page-item'><a class='page-link' href='form-tambah-Mahasiswa.php?halaman=$i'>$i</a></li>";
+                                        } else {
+                                            echo "<li class='page-item active'>
+                                            <a class='page-link' href='#'>$i <span class='sr-only'>(current)</span></a>
+                                            </li>";
+                                        }
+                                    }
                                 }
-                            }
 
                             echo '
                                 </ul>
@@ -365,6 +394,10 @@
                                         </select>
                                     </div>
                                 </div>
+                                <div class="form-check">
+                                        <input type="checkbox" name="resetPass" class="form-check-input" id="exampleCheck1">
+                                        <label class="form-check-label" for="exampleCheck1">RESET PASSWORD</label>
+                                    </div>
                                 <div class="row justify-content-end">
                                     <div class="col-7">
                                         <button type="button" class="btn btn-secondary mt-4" data-dismiss="modal">Close</button>

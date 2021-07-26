@@ -7,6 +7,12 @@ $noHp = mysqli_real_escape_string($koneksi,strip_tags($_POST['noHp']));
 $prodiMhs = $_POST['prodiMhs'];
 
 $statusMhs = $_POST['statusMhs'];
+$passwordUlang = $nim."!mhs";
+
+if (isset($_POST['resetPass'])) {
+    mysqli_query($koneksi,"UPDATE pengguna SET passwordPengguna='$passwordUlang' where `id_user` = '$nim'");
+}
+
 
 if ($statusMhs!="Lulus") {
     mysqli_query($koneksi,"update pengguna set lvAkses=1 where id_user='$nim'");

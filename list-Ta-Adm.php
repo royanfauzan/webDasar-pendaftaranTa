@@ -69,8 +69,8 @@
                                     if (isset($_COOKIE['status'])) {
                                         if ($_COOKIE['status'] == 0) {
                                             echo "<span class='text-warning font-weight-700'>Penolakan Tugas Akhir " . $_COOKIE['nim'] . " Berhasil Disimpan </span>";
-                                        } else if ($_COOKIE['status'] == 2) {
-                                            echo "<span class='text-success font-weight-700'>Persetujuan Tugas Akhir " . $_COOKIE['nim'] . " Berhasil Disimpan </span>";
+                                        } else if ($_COOKIE['status'] == 3) {
+                                            echo "<span class='text-success font-weight-700'>Konfirmasi Tugas Akhir " . $_COOKIE['nim'] . " Berhasil Disimpan </span>";
                                         } else {
                                             echo "<span class='text-danger font-weight-700'>Opsi Persetujuan TA : " . $_COOKIE['nim'] . " Gagal Disimpan</span>";
                                         }
